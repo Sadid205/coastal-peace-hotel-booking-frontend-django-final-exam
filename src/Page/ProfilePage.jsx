@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 
 const ProfilePage = ()=>{
     const token = localStorage.getItem("Token")
@@ -42,10 +43,10 @@ const ProfilePage = ()=>{
                     <p className="text-gray-500">Account Balance : {userAccountData?userAccountData[0].balance:"000000000"}$</p>
                 </div>
                 <div className="p-4 mt-2 text-center border-t cursor-pointer d-flex">
-                    <a href="/edit_profile" className="block w-1/2 px-6 py-2 mx-auto font-semibold text-white bg-gray-900 rounded-full hover:shadow-lg">Edit Profile</a>
+                    <Link to="/edit_profile" className="block w-1/2 px-6 py-2 mx-auto font-semibold text-white bg-gray-900 rounded-full hover:shadow-lg">Edit Profile</Link>
                 </div>
                 <div className="p-4 mt-2 text-center cursor-pointer d-flex">
-                    <a href="/change_password" className="block w-1/2 px-6 py-2 mx-auto text-sm font-semibold text-white rounded-full bg-sky-400 hover:shadow-lg">Change Password</a>
+                    <Link to="/change_password" className="block w-1/2 px-6 py-2 mx-auto text-sm font-semibold text-white rounded-full bg-sky-400 hover:shadow-lg">Change Password</Link>
                 </div>
             </div>
     )

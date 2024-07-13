@@ -4,7 +4,7 @@ import Logo from "../assets/logo.png";
 import { LiaBarsSolid } from "react-icons/lia";
 import { RxCross1 } from "react-icons/rx";
 // import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast,{ Toaster } from "react-hot-toast";
 const Header = () => {
   const navigate = useNavigate()
@@ -79,7 +79,7 @@ const Header = () => {
           <ul className="md:flex md:ml-24">
             {Links.map((item, index) => (
               <li className="md:ml-3" key={index}>
-                <a className="font-bold text-gray-900" href={item.link}>{item.name}</a>
+                <Link className="font-bold text-gray-900" to={item.link}>{item.name}</Link>
               </li>
             ))}
           </ul>
@@ -93,23 +93,23 @@ const Header = () => {
               </a>
             </div>
             <div className="mt-2 ms-2 md:mt-0">
-              <a href="/profile" className="px-2 py-2 ml-2 text-white rounded-md">
+              <Link to={"profile"} className="px-2 py-2 ml-2 text-white rounded-md">
                 {
                   userData?<img className="rounded-full shadow-lg" width={40} src={userData[0].image ? userData[0].image:"../assets/profile.jpeg"} alt="image" />:"Profile"
                 }
-              </a>
+              </Link>
             </div>
           </div>:<div className="items-center md:flex">
           <div className="flex ml-2">
               {/* <img src={Lock} alt="Lock" /> */}
-              <a href="/login" className="ml-2 font-bold">
+              <Link to="login" className="ml-2 font-bold">
                 Login
-              </a>
+              </Link>
             </div>
             <div className="mt-2 md:mt-0">
-              <a href="/register" className="px-2 py-2 ml-2 text-white bg-green-600 rounded-md font-semi-bold">
+              <Link to="register" className="px-2 py-2 ml-2 text-white bg-green-600 rounded-md font-semi-bold">
                 SignUp
-              </a>
+              </Link>
             </div>
           </div>}
       </div>
