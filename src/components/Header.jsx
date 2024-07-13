@@ -18,7 +18,7 @@ const Header = () => {
     // { name: "About", link: "/about" },
   ];
   if (token){
-    Links.push({ name: "Deposit", link: "/deposit" })
+    Links.push({ name: "Deposit", link: "deposit" })
   }
   useEffect(()=>{
     const fetchData = async()=>{

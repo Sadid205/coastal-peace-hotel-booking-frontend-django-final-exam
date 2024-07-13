@@ -41,13 +41,8 @@ function App() {
             </ProtectedRoute>
           }/>
           <Route path="/login" element={<LoginPage/>}/>
-          <Route path="/profile" element={
-            <ProtectedRoute token={token}>
-              <ProfilePage/>
-            </ProtectedRoute>
-          }/>
           <Route path="/register" element={<RegisterPage/>}/>
-          <Route path="/deposit" element={
+          <Route path="deposit" element={
             <ProtectedRoute token={token}>
               <DepositPage/>
             </ProtectedRoute>
