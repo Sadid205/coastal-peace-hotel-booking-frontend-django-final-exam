@@ -18,7 +18,7 @@ const Header = () => {
     // { name: "About", link: "/about" },
   ];
   if (token){
-    Links.push({ name: "Deposit", link: "deposit" })
+    Links.push({ name: "Deposit", link: "/deposit" })
   }
   useEffect(()=>{
     const fetchData = async()=>{
@@ -93,7 +93,7 @@ const Header = () => {
               </a>
             </div>
             <div className="mt-2 ms-2 md:mt-0">
-              <Link to={"profile"} className="px-2 py-2 ml-2 text-white rounded-md">
+              <Link to={"/profile"} className="px-2 py-2 ml-2 text-white rounded-md">
                 {
                   userData?<img className="rounded-full shadow-lg" width={40} src={userData[0].image ? userData[0].image:"../assets/profile.jpeg"} alt="image" />:"Profile"
                 }
