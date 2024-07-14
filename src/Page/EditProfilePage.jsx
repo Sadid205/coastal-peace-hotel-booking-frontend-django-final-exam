@@ -12,7 +12,8 @@ function EditProfilePage(){
         })
 
     }
-    const handleEditPost = async()=>{
+    const handleEditPost = async(e)=>{
+      e.preventDefault()
         try{
            const response =  await fetch('https://coastal-peace-hotel-booking.onrender.com/guest/edit_profile/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
             body:JSON.stringify({

@@ -112,7 +112,6 @@ function HotelDetailsPage(){
         const bookedList = await fetch(`https://coastal-peace-hotel-booking.onrender.com/booking/list/?hotel_id=${hotel_id}&guest_id=${guestId}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
         const bookedResponse = await bookedList.json()
         setBookingList(bookedResponse)
-        console.log(bookedResponse)
        }
         if(hotel_id && token && user_id){
             getDetails()
@@ -175,7 +174,9 @@ function HotelDetailsPage(){
         })
       })
       const reviewResponse = await postReview.json()
-      console.log(reviewResponse)
+      if(reviewResponse){
+        toast.success("You have successfully post a review.")
+      }
    }
     
     
@@ -190,7 +191,7 @@ function HotelDetailsPage(){
         <div className="py-8 bg-gray-100 dark:bg-gray-800">
             <div className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
                 <div className="flex flex-col -mx-4 md:flex-row">
-                <div className="px-4 md:flex-1">
+                <div className="px-4 -z-0 md:flex-1">
                     <div className="h-[400px] m-auto w-96 rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
                     <Slider {...settings}>
                     {hotelDetails?hotelDetails.images?.map((images,index)=>(

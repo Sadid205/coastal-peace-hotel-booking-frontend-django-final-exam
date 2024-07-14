@@ -4,7 +4,7 @@ import toast,{ Toaster } from "react-hot-toast";
 function ChangePasswordPage(){
     const user_id = localStorage.getItem("user_id")
     const token = localStorage.getItem("Token")
-    const [changePassword,setChangePassword] = useState(null)
+    const [changePassword,setChangePassword] = useState({})
     const passwordEventHandler = (e)=>{
         e.preventDefault()
         setChangePassword(

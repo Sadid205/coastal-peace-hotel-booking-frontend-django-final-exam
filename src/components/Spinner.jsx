@@ -12,7 +12,7 @@ const Spinner = () => {
           <Typewriter
             options={{
               strings: [
-                "I think you haven't logged in yet.Please login.",
+                "You haven't logged in yet.Please login.",
               ],
               autoStart: true,
               loop: false,
