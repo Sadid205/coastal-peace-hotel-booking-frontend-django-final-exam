@@ -42,7 +42,7 @@ function App() {
           }/>
           <Route path="/login" element={<LoginPage/>}/>
           <Route path="/register" element={<RegisterPage/>}/>
-          <Route path="deposit" element={
+          <Route path="/deposit" element={
             <ProtectedRoute token={token}>
               <DepositPage/>
             </ProtectedRoute>

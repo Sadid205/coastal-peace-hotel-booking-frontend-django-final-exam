@@ -79,11 +79,9 @@ function HotelDetailsPage(){
             const reviewData = await hotelReviews.json()
             setHotelReviews(reviewData)
             reviewData.forEach(async(single_reviewer)=>{
-              // console.log(single_reviewer)
               try{
                 const user_data = await fetch(`https://coastal-peace-hotel-booking.onrender.com/guest/user/?guest_id=${single_reviewer.reviewer}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const responseUserData = await user_data.json()
-                // console.log(responseUserData)
                 setReviewer(prevState=>({
                   ...prevState,
                   [single_reviewer.reviewer]:responseUserData
@@ -91,58 +89,49 @@ function HotelDetailsPage(){
     
                 const  guest_data = await fetch(`https://coastal-peace-hotel-booking.onrender.com/guest/list/${single_reviewer.reviewer}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const responseGuestData = await guest_data.json()
-                // console.log(responseGuestData)
                 setGuestReviewer(prevState=>({
                   ...prevState,
                   [single_reviewer.reviewer]:responseGuestData
                 }))
-                // console.log(responseGuestData)
-             
               }catch(e){
                 console.log(e)
               }
             })
         }
-        // const getUsername=async()=>{
-        //     const user_account = await  fetch(`http://127.0.0.1:8000/guest/user/${user_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
-        //     const account_data = await user_account.json()
-        //     if(account_data){
-        //         setUsername(account_data.username)
-        //     }
-        // }
         const getGuestAccount=async()=>{
           try{
             const guestAccount = await fetch(`https://coastal-peace-hotel-booking.onrender.com/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const guestData = await guestAccount.json()
             setGuestId(guestData[0].id)
-            const bookedList = await fetch(`https://coastal-peace-hotel-booking.onrender.com/list/?hotel_id=${hotel_id}&guest_id=${guestData[0].id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
-            const bookedResponse = await bookedList.json()
-            setBookingList(bookedResponse)
-            // console.log(bookedResponse)
           }
           catch(e){
             console.log(e)
           }
         }
-       
+        const setBookingListMethod=async()=>{
+        const bookedList = await fetch(`https://coastal-peace-hotel-booking.onrender.com/booking/list/?hotel_id=${hotel_id}&guest_id=${guestId}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+        const bookedResponse = await bookedList.json()
+        setBookingList(bookedResponse)
+        console.log(bookedResponse)
+       }
         if(hotel_id && token && user_id){
             getDetails()
             getReviews()
-            // getUsername()
             getGuestAccount()
+            setBookingListMethod()
         }
-    },[token,hotel_id,user_id])
-    let image_count;
-    if(hotelDetails){
-        image_count = hotelDetails.images.length
-    }
-    const settings = {
-        dots: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1
-    };
+    },[token,hotel_id,user_id,guestId]);
+        let image_count;
+        if(hotelDetails){
+            image_count = hotelDetails.images.length
+        }
+        const settings = {
+            dots: false,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1
+        };
 
     const bookingHandler= async(e)=>{
         e.preventDefault()
@@ -188,9 +177,13 @@ function HotelDetailsPage(){
       const reviewResponse = await postReview.json()
       console.log(reviewResponse)
    }
+    
+    
   //  console.log(reviewer[5][0].first_name)
-  //  console.log(hotelReviews)
+  //  console.log(hotelReviews.length)
   // console.log(guestReviewer[5].image)
+  // console.log(guestId)
+  // console.log(hasStayedAt)
     return (
   <>
         <div><Toaster/></div>
@@ -309,6 +302,7 @@ function HotelDetailsPage(){
                 {item.reviewer==guestId?<Link to={`/edit_review/${item.id}/${hotel_id}/${guestId}`}><span><FaEdit /></span></Link>:""}
             </div>
           ))}
+          {hotelReviews.length<2?<div></div>:""}
         </Slider>
         <div className="absolute top-0 right-0 flex">
           <div

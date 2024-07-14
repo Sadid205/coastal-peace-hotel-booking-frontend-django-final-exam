@@ -2,7 +2,7 @@ import { useState } from "react"
 import toast,{ Toaster } from "react-hot-toast";
 const DepositPage = ()=>{
     const token = localStorage.getItem("Token")
-    const [deposit,setDeposit] = useState(null)
+    const [deposit,setDeposit] = useState("")
     const [error,setError] = useState("")
     const depositHandle = async(e)=>{
         e.preventDefault()

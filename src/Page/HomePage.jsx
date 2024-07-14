@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { FaHotel } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import Spinner from "../components/Spinner";
+
 
 function HomePage(){
     const token = localStorage.getItem("Token")
@@ -55,7 +57,7 @@ function HomePage(){
             Details</Link>
         </div>
 </div>
-    )):<h1>Empty</h1>}
+    )):<Spinner/>}
 </div>
 </>  
     )
