@@ -6,12 +6,17 @@ function LoginPage() {
 const [username,setUsername] = useState('');
 const [password,setPassword] = useState('');
 const [errors,SetErrors] = useState('');
+const [isLoading,setIsLoading] = useState(false)
 const navigate = useNavigate()
 const LoginMethod = async(e)=>{
     e.preventDefault()
     try{
+        setIsLoading(true)
         const response = await axios.post('https://coastal-peace-hotel-booking.onrender.com/guest/login/',{username,password},{headers:{'Content-Type':'application/json'}})
         const data = response.data;
+        if(data){
+          setIsLoading(false)
+        }
         if (data.Error){
           SetErrors(data)
         }else{
@@ -54,17 +59,15 @@ const LoginMethod = async(e)=>{
               </label>
             </div>
             <div className="relative">
-              <button type='submit' className="px-2 py-1 text-white rounded-md bg-cyan-500">
-                Submit
-              </button>
+            <button disabled={isLoading} type='submit' className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+            <span className="relative w-20 flex  justify-center px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            {isLoading?<div className="w-5 h-5 border-4 border-gray-300 rounded-full animate-spin border-t-yellow-200"/>:<p>Login</p>}
+            </span>
+          </button>
+
             </div>
           </div>
         </form>
-      </div>
-      <div className="flex justify-center w-full">
-        <button className="flex items-center px-6 py-2 text-sm font-medium text-gray-800 bg-white border border-gray-300 rounded-lg shadow-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
-         Forget Password ?
-        </button>
       </div>
     </div>
   </div>
@@ -74,3 +77,5 @@ const LoginMethod = async(e)=>{
 }
 
 export default LoginPage;
+
+

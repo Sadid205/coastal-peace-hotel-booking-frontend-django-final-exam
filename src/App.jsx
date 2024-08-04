@@ -12,10 +12,14 @@ import DepositPage from "./Page/DepositPage"
 import EditReviewPage from "./Page/EditReviewPage"
 import { Footer } from "./components/Footer"
 import ProtectedRoute from "./components/ProtectedRoute"
+import BookingHistoryPage from "./Page/BookingHistoryPage"
+import {SearchContextProvider} from "./context/SearchContext"
 const token = localStorage.getItem("Token")
+
 function App() {
 
   return (
+    <SearchContextProvider>
       <BrowserRouter>
         <Header/>
         <Routes>
@@ -52,9 +56,15 @@ function App() {
               <ProfilePage/>
             </ProtectedRoute>
           }/>
+          <Route path="/booking_history" element={
+            <ProtectedRoute token={token}>
+              <BookingHistoryPage/>
+            </ProtectedRoute>
+          }/>
         </Routes>
         <Footer/>
       </BrowserRouter>
+      </SearchContextProvider>
   )
 }
 

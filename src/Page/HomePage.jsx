@@ -1,18 +1,20 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaHotel } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import Spinner from "../components/Spinner";
-
-
+import CreateSearchContext from "../context/SearchContext";
+import not_found from "../assets/not_found.png"
 function HomePage(){
     const token = localStorage.getItem("Token")
     const user_id = localStorage.getItem("user_id")
     const [hotelData,setHotelData] = useState(null)
+    let [page,setPage] = useState(1)
+    const {searchValue} = useContext(CreateSearchContext)
     useEffect(()=>{
        const getHotelList = async()=>{
         try{
-            const response = await fetch('https://coastal-peace-hotel-booking.onrender.com/hotel/list/',{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const response = await fetch(`https://coastal-peace-hotel-booking.onrender.com/hotel/list/?page=${page}&search=${searchValue}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const data = await response.json()
             if (data){
                 setHotelData(data)
@@ -26,15 +28,34 @@ function HomePage(){
         getHotelList()
        }
 
-    },[token,user_id])
-    // {hotelData?console.log(hotelData.results.forEach((item,index)=>console.log(item))):""}
+    },[token,user_id,page,searchValue])
+    const nextPrevButton = ()=>{
+        let buttons = [];
+        if (hotelData){
+            for(let i=1;i<=Math.ceil(hotelData.count/10);i++){
+                if(i>=4){
+                    buttons[3]=<li key={i}><button className={`${page==i?"flex items-center justify-center h-10 px-4 leading-tight  bg-gray-700 text-white":"flex items-center justify-center h-10 px-4 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"}`}>{page>=4?page:"..."}</button></li>
+                }else{
+                    buttons.push(
+                        <li key={i}>
+                            <button onClick={()=>setPage(i)} className={`${page==i?"flex items-center justify-center h-10 px-4 leading-tight  bg-gray-700 text-white":"flex items-center justify-center h-10 px-4 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"} `}>{i}</button>
+                        </li>
+                        )  
+                }
+            }
+        }else{
+            return  <li><button  className="flex items-center justify-center h-10 px-4 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">0</button></li>
+        }
+        return buttons
+    }
+    console.log(hotelData)
     return (
-<>
-<div className="flex flex-wrap gap-3">
-    {hotelData?hotelData.results.map((hotel,index)=>(
-        <div key={index} className="flex flex-col w-full max-w-xs m-10 m-auto overflow-hidden bg-white border border-gray-100 rounded-lg shadow-md">
+<div>
+{token&&user_id?<div><div className="flex flex-wrap gap-3">
+    {hotelData && hotelData.results.length>0?hotelData.results.map((hotel,index)=>(
+        <div key={index} className="flex flex-col w-full max-w-xs m-auto overflow-hidden bg-white border border-gray-100 rounded-lg shadow-md">
         <div className="flex mx-3 mt-3 overflow-hidden h-60 rounded-xl" href="#">
-            <img width="100%" className="object-cover" src={hotel.images[0].image} alt="product image" />
+            <img width="100%" className="object-cover" src={hotel.images[0]?.image} alt="product image" />
         </div>
         <div className="px-5 pb-5 mt-4">
             <a href="#">
@@ -57,10 +78,28 @@ function HomePage(){
             Details</Link>
         </div>
 </div>
-    )):<Spinner/>}
+    )):<div className="w-full text-center">
+        <img className="w-1/2 m-auto" src={not_found}/>
+        <h1 className="text-gray-500">No search result found for <span className="font-bold">{searchValue}</span></h1>
+    </div>
+    }
 </div>
-</>  
-    )
+<div className="text-center mt-7">
+  <div aria-label="Page navigation example">
+    <ul className="inline-flex h-10 -space-x-px text-base">
+      <li><button disabled={hotelData?.previous==null} onClick={hotelData&&hotelData.previous?()=>setPage(page=page-1):null} className="flex items-center justify-center h-10 px-4 leading-tight text-gray-500 bg-white border border-gray-300 ms-0 border-e-0 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</button>
+      </li>
+      {nextPrevButton()}
+      <li>
+      <button disabled={hotelData?.next==null} onClick={hotelData&&hotelData.next?()=>setPage(page=page+1):null} className="flex items-center justify-center h-10 px-4 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</button>
+      </li>
+    </ul>
+  </div>
+</div>
+</div>
+:<Spinner/>}
+</div>  
+)
 }
 
 export default HomePage;

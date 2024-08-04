@@ -4,6 +4,7 @@ function EditProfilePage(){
     const token = localStorage.getItem("Token")
     // const user_id = localStorage.getItem("user_id")
     const [profile,setProfile] = useState(null)
+    const [isLoading,setIsLoading] = useState(false)
     const handleUpdate = (e)=>{
         e.preventDefault()
         setProfile({
@@ -15,6 +16,7 @@ function EditProfilePage(){
     const handleEditPost = async(e)=>{
       e.preventDefault()
         try{
+          setIsLoading(true)
            const response =  await fetch('https://coastal-peace-hotel-booking.onrender.com/guest/edit_profile/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
             body:JSON.stringify({
                 username:profile.username,
@@ -24,8 +26,10 @@ function EditProfilePage(){
                 })
             })
            const data = await response.json()
-           toast.success("You have successfully updated your account.")
-           console.log(data)
+           if(data){
+            toast.success("You have successfully updated your account.")
+            setIsLoading(false)
+           }
         }catch(e){
             console.log(e)
         }
@@ -71,7 +75,9 @@ function EditProfilePage(){
             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
             <input value={profile?profile.email:""} onChange={(e)=>handleUpdate(e)} type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
           </div>
-          <button type="submit" className="w-full text-white bg-blue-700 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Update</button>
+          <button disabled={isLoading} type="submit" className="w-full h-12 text-white bg-blue-700 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+            {isLoading?(<div className="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-yellow-600 rounded-full" role="status" aria-label="loading"></div>):("Update")}
+          </button>
         </form>
       </div>
     </div>

@@ -5,6 +5,7 @@ function ChangePasswordPage(){
     const user_id = localStorage.getItem("user_id")
     const token = localStorage.getItem("Token")
     const [changePassword,setChangePassword] = useState({})
+    const [isLoading,setIsLoading] = useState(false)
     const passwordEventHandler = (e)=>{
         e.preventDefault()
         setChangePassword(
@@ -17,6 +18,7 @@ function ChangePasswordPage(){
     const updatePasswordHandler =async(e)=>{
         e.preventDefault()
         try{
+            setIsLoading(true)
             const response = await fetch(`https://coastal-peace-hotel-booking.onrender.com/guest/change_password/${user_id}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
                 body:JSON.stringify({
                     old_password:changePassword.old_password,
@@ -25,6 +27,9 @@ function ChangePasswordPage(){
                     })
                 })
                 const data = await response.json()
+                if(data){
+                    setIsLoading(false)
+                }
                 if (data.validation_error){
                     toast.error(data.validation_error[0])
                 }else if(data.new_password){
@@ -65,7 +70,9 @@ function ChangePasswordPage(){
                     </svg>
                     <input onChange={(e)=>passwordEventHandler(e)} type="password" name="confirm_password" id="confirm_password" className="w-full py-2 pl-12 bg-gray-200 rounded md:py-4 focus:outline-none" placeholder="Confirm Password" />
                 </div>
-                <button type="submit" className="w-full p-2 font-medium text-white uppercase rounded bg-gradient-to-b from-gray-700 to-gray-900 md:p-4">Change Password</button>
+                <button disabled={isLoading} type="submit" className="w-full p-2 font-medium text-white uppercase rounded h-14 bg-gradient-to-b from-gray-700 to-gray-900 md:p-4">
+                    {isLoading?(<div className="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-purple-600 rounded-full" role="status" aria-label="loading"><span className="sr-only">Loading...</span></div>):("Change Password")}
+                </button>
             </form>
         </div>
         </div>

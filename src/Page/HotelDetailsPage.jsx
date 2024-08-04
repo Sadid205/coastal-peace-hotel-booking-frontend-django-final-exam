@@ -12,7 +12,7 @@ function HotelDetailsPage(){
     const {hotel_id} = useParams()
     const token = localStorage.getItem("Token")
     const user_id = localStorage.getItem("user_id")
-    const [bookingList,setBookingList] = useState(null)
+    const [bookingList,setBookingList] = useState()
     const [reviewer,setReviewer] = useState({})
     const [guestReviewer,setGuestReviewer] = useState({})
     const [hotelDetails,setHotelDetails] = useState(null)
@@ -23,6 +23,10 @@ function HotelDetailsPage(){
     const [reviews,setReviews] = useState("")
     const [rating,setRating] = useState("")
     const [guestId,setGuestId] = useState(null)
+    const [isReviewPost,setIsReviewPost] = useState(false)
+    const [isLoading,setIsLoading] = useState(false)
+    const [hasStayedAt,setHasStayedAt] = useState(false)
+    const [bookingLoader,setBookingLoader] = useState(false)
 
     const slider = useRef(null)
     const next = ()=>{
@@ -70,11 +74,20 @@ function HotelDetailsPage(){
     
     useEffect(()=>{
         const getDetails = async()=>{
+           try{
+            setIsLoading(true)
             const response = await fetch(`https://coastal-peace-hotel-booking.onrender.com/hotel/list/${hotel_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const data = await response.json()
-            setHotelDetails(data)
+            if(data){
+              setHotelDetails(data)
+              setIsLoading(false)
+            }
+           }catch(e){
+            console.log(e)
+           }
         }
         const getReviews = async()=>{
+          try{
             const hotelReviews = await fetch(`https://coastal-peace-hotel-booking.onrender.com/reviews/list/?hotel_id=${hotel_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const reviewData = await hotelReviews.json()
             setHotelReviews(reviewData)
@@ -97,6 +110,10 @@ function HotelDetailsPage(){
                 console.log(e)
               }
             })
+        
+          }catch(e){
+            console.log(e)
+          }
         }
         const getGuestAccount=async()=>{
           try{
@@ -109,17 +126,35 @@ function HotelDetailsPage(){
           }
         }
         const setBookingListMethod=async()=>{
-        const bookedList = await fetch(`https://coastal-peace-hotel-booking.onrender.com/booking/list/?hotel_id=${hotel_id}&guest_id=${guestId}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
-        const bookedResponse = await bookedList.json()
-        setBookingList(bookedResponse)
+        try{
+          const bookedList = await fetch(`https://coastal-peace-hotel-booking.onrender.com/booking/list/?hotel_id=${hotel_id?hotel_id:""}&guest_id=${guestId?guestId:""}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+          const bookedResponse = await bookedList.json()
+          setBookingList(bookedResponse)
+        }catch(e){
+          console.log(e)
+        }
        }
+       
         if(hotel_id && token && user_id){
             getDetails()
             getReviews()
             getGuestAccount()
-            setBookingListMethod()
         }
-    },[token,hotel_id,user_id,guestId]);
+        if(guestId){
+          setBookingListMethod()
+        } 
+    },[token,hotel_id,user_id,guestId,isReviewPost]);
+    useEffect(()=>{
+      const stayed_at=()=>{
+        if (bookingList && bookingList.length>=1){
+          const isTrue = bookingList.some((booked_hotel)=>booked_hotel.booking_status==="Checked-out")
+          setHasStayedAt(isTrue)
+        }
+      }
+      if(bookingList && bookingList.length>=1){
+        stayed_at()
+      }
+    })
         let image_count;
         if(hotelDetails){
             image_count = hotelDetails.images.length
@@ -131,134 +166,150 @@ function HotelDetailsPage(){
             slidesToShow: 1,
             slidesToScroll: 1
         };
-
     const bookingHandler= async(e)=>{
         e.preventDefault()
+        try{
+        setBookingLoader(true)
         const bookingRequest = await fetch(`https://coastal-peace-hotel-booking.onrender.com/booking/${hotel_id}/`,{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
-            body:JSON.stringify({
-                number_of_guests:guestNumber,
-                room_type:roomTypes
-                })
-            })
-        const bookingResponse = await bookingRequest.json()
-        toast.success(bookingResponse.Response, {
-            icon: '👏',
-            style: {
-              borderRadius: '10px',
-              background: '#333',
-              color: '#fff',
-            },
+          body:JSON.stringify({
+              number_of_guests:guestNumber,
+              room_type:roomTypes
+              })
           })
-        setGuestNumber("")
-        setRoomTypes("")
-        setShowModal(false)
-    }
-    const stayed_at=()=>{
-      if (bookingList){
-        const isTrue = bookingList.some((booked_hotel)=>booked_hotel.booking_status=="Checked-out")
-        return isTrue
-      }else{
-        return false
+      const bookingResponse = await bookingRequest.json()
+      if(bookingResponse.Response){
+        setBookingLoader(false)
+        toast.success(bookingResponse.Response, {
+          icon: '👏',
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        })
+      setGuestNumber("")
+      setRoomTypes("")
+      setShowModal(false)
+      }
+      }catch(e){
+        console.log(e)
       }
     }
-   const hasStayedAt = stayed_at()
+    
   
    const handlePostReview = async(e)=>{
     e.preventDefault()
-    const postReview = await fetch('https://coastal-peace-hotel-booking.onrender.com/reviews/list/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
-      body:JSON.stringify({
-        reviewer:guestId,
-        hotel:hotel_id,
-        reviews:reviews,
-        rating:rating
+    try{
+      setIsReviewPost(true)
+      const postReview = await fetch('https://coastal-peace-hotel-booking.onrender.com/reviews/list/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+        body:JSON.stringify({
+          reviewer:guestId,
+          hotel:hotel_id,
+          reviews:reviews,
+          rating:rating
+          })
         })
-      })
-      const reviewResponse = await postReview.json()
-      if(reviewResponse){
-        toast.success("You have successfully post a review.")
-      }
+        const reviewResponse = await postReview.json()
+        if(reviewResponse){
+          setIsReviewPost(false)
+          toast.success("You have successfully post a review.")
+        }
+    }catch(e){
+      console .log(e)
+    }
    }
-    
-    
-  //  console.log(reviewer[5][0].first_name)
-  //  console.log(hotelReviews.length)
-  // console.log(guestReviewer[5].image)
-  // console.log(guestId)
-  // console.log(hasStayedAt)
     return (
   <>
         <div><Toaster/></div>
         <div className="py-8 bg-gray-100 dark:bg-gray-800">
-            <div className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
-                <div className="flex flex-col -mx-4 md:flex-row">
-                <div className="px-4 -z-0 md:flex-1">
-                    <div className="h-[400px] m-auto w-96 rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
-                    <Slider {...settings}>
-                    {hotelDetails?hotelDetails.images?.map((images,index)=>(
-                                <div key={index} className="">
-                                    <img style={{height:'400px'}} className="w-full" src={images.image} alt="image" />
-                                </div>
-                    )):""
-                    }    
-                    {image_count>=2?"":<div></div>}
-                    </Slider>
-                    </div>
-                    <div className="flex mb-4 -mx-2">
-                        <div className="w-1/2 px-2 m-auto">
-                            <button onClick={() => setShowModal(true)} className="w-full px-4 py-2 font-bold text-white bg-gray-900 rounded-full dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700">Book Now</button>
-                        </div>
-                    </div>
+            {isLoading?(
+               <div className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
+                 <div className="space-y-8 animate-pulse md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex md:items-center">
+                  <div className="flex h-[400px] m-auto w-1/2 items-center justify-center  bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
+                    <svg className="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                      <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+                    </svg>
+                  </div>
+                  <div className="w-1/2">
+                    <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4" />
+                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[480px] mb-2.5" />
+                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5" />
+                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[440px] mb-2.5" />
+                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[460px] mb-2.5" />
+                    <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]" />
+                  </div>
                 </div>
-                <div className="px-4 md:flex-1">
-                    <h2 className="mb-2 text-2xl font-bold text-gray-800 dark:text-white">{hotelDetails?hotelDetails.name:""}</h2>
-                    <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
-                    <span className="font-bold text-gray-400">Details</span> : {hotelDetails?hotelDetails.details:""}
-                    </p>
-                    <div className="flex mb-4">
-                    <div className="mr-4">
-                        <span className="font-bold text-gray-700 dark:text-gray-300">Booking Price:</span>
-                        <span className="text-gray-600 dark:text-gray-300">{hotelDetails?hotelDetails.booking_price:""}$</span>
+               </div>
+              ):(<div className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
+              <div className="flex flex-col -mx-4 md:flex-row">
+              <div className="px-4 -z-0 md:flex-1">
+                  <div className="h-[400px] m-auto w-96 rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
+                  <Slider {...settings}>
+                  {hotelDetails?hotelDetails.images?.map((images,index)=>(
+                    <div key={index} className="">
+                      <img style={{height:'400px'}} className="w-full" src={images.image} alt="image" />
                     </div>
-                    <div>
-                        <span className="font-bold text-gray-700 dark:text-gray-300">Number of rooms : </span>
-                        <span className="text-gray-600 dark:text-gray-300">{hotelDetails?hotelDetails.number_of_rooms:""}</span>
-                    </div>
-                    </div>
-                    <div className="mb-4">
-                    <span className="font-bold text-gray-700 dark:text-gray-300">Hotel Rating : </span>
-                    <span className="text-gray-600 dark:text-gray-300">{hotelDetails?hotelDetails.rating:""}</span>
-                    </div>
-                    <div className="mb-4">
-                    <span className="font-bold text-gray-700 dark:text-gray-300">Address : </span>
-                    <span className="text-gray-600 dark:text-gray-300">{hotelDetails?hotelDetails.address:""}</span>
-                    </div>
-                    <div>
-                    <span className="font-bold text-gray-700 dark:text-gray-300">Facilities : </span>
-                    <span className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                       {hotelDetails?hotelDetails.facilities:""}
-                    </span>
-                    </div>
-                    <div>
-                    <span className="font-bold text-gray-700 dark:text-gray-300">Location : </span>
-                    <span className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                       {hotelDetails?hotelDetails.location:""}
-                    </span>
-                    </div>
-                    <div>
-                    <span className="font-bold text-gray-700 dark:text-gray-300">Room Types : </span>
-                    <span className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                       {hotelDetails?hotelDetails.room_types:""}
-                    </span>
-                    </div>
-                    <div>
-                    <span className="font-bold text-gray-700 dark:text-gray-300">Rules : </span>
-                    <span className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                       {hotelDetails?hotelDetails.rules:""}
-                    </span>
-                    </div>
-                </div>
-                </div>
-            </div>
+                  )):""
+                  }    
+                  {image_count>=2?"":<div></div>}
+                  </Slider>
+                  </div>
+                  <div className="flex mb-4 -mx-2">
+                      <div className="w-1/2 px-2 m-auto">
+                          <button onClick={() => setShowModal(true)} className="w-full px-4 py-2 font-bold text-white bg-gray-900 rounded-full dark:bg-gray-600 hover:bg-gray-800 dark:hover:bg-gray-700">Book Now</button>
+                      </div>
+                  </div>
+              </div>
+              <div className="px-4 md:flex-1">
+                  <h2 className="mb-2 text-2xl font-bold text-gray-800 dark:text-white">{hotelDetails?hotelDetails.name:""}</h2>
+                  <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
+                  <span className="font-bold text-gray-400">Details</span> : {hotelDetails?hotelDetails.details:""}
+                  </p>
+                  <div className="flex mb-4">
+                  <div className="mr-4">
+                      <span className="font-bold text-gray-700 dark:text-gray-300">Booking Price:</span>
+                      <span className="text-gray-600 dark:text-gray-300">{hotelDetails?hotelDetails.booking_price:""}$</span>
+                  </div>
+                  <div>
+                      <span className="font-bold text-gray-700 dark:text-gray-300">Number of rooms : </span>
+                      <span className="text-gray-600 dark:text-gray-300">{hotelDetails?hotelDetails.number_of_rooms:""}</span>
+                  </div>
+                  </div>
+                  <div className="mb-4">
+                  <span className="font-bold text-gray-700 dark:text-gray-300">Hotel Rating : </span>
+                  <span className="text-gray-600 dark:text-gray-300">{hotelDetails?hotelDetails.rating:""}</span>
+                  </div>
+                  <div className="mb-4">
+                  <span className="font-bold text-gray-700 dark:text-gray-300">Address : </span>
+                  <span className="text-gray-600 dark:text-gray-300">{hotelDetails?hotelDetails.address:""}</span>
+                  </div>
+                  <div>
+                  <span className="font-bold text-gray-700 dark:text-gray-300">Facilities : </span>
+                  <span className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                     {hotelDetails?hotelDetails.facilities:""}
+                  </span>
+                  </div>
+                  <div>
+                  <span className="font-bold text-gray-700 dark:text-gray-300">Location : </span>
+                  <span className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                     {hotelDetails?hotelDetails.location:""}
+                  </span>
+                  </div>
+                  <div>
+                  <span className="font-bold text-gray-700 dark:text-gray-300">Room Types : </span>
+                  <span className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                     {hotelDetails?hotelDetails.room_types:""}
+                  </span>
+                  </div>
+                  <div>
+                  <span className="font-bold text-gray-700 dark:text-gray-300">Rules : </span>
+                  <span className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                     {hotelDetails?hotelDetails.rules:""}
+                  </span>
+                  </div>
+              </div>
+              </div>
+          </div>)}
         </div>
         <div className="">
       <br />
@@ -276,11 +327,11 @@ function HotelDetailsPage(){
             <div key={index} className="p-4">
               <div className="">
                 <div className="w-20">
-                  {guestReviewer[item.reviewer]&&guestReviewer[item.reviewer].image?(<img className="rounded-full " src={guestReviewer[item.reviewer].image} alt="profilePicture" />):(<img className="rounded-full " src={image} alt="profilePicture" />)}
+                  {guestReviewer[item.reviewer]&&guestReviewer[item.reviewer].image?(<img className="w-16 h-16 rounded-full w" src={guestReviewer[item.reviewer].image} alt="profilePicture" />):(<img className="rounded-full " src={image} alt="profilePicture" />)}
                 </div>
                 <div>
                   <p className="text-md text-slate-600">
-                    {item.reviews}
+                    {item.reviews?item.reviews:""}
                   </p>
                 </div>
               </div>
@@ -348,8 +399,8 @@ function HotelDetailsPage(){
             focus:ring-1
             focus:ring-sky-500
             focus:invalid:border-red-500 focus:invalid:ring-red-500" name="reviews" placeholder="Reviews"/>
-            <button className="px-4 py-1.5 rounded-md shadow-lg bg-gradient-to-r from-pink-600 to-red-600 font-medium text-gray-100 block transition duration-300" type="submit">
-              Post
+            <button disabled={isReviewPost} className="block h-10 px-4 py-2 font-medium text-gray-100 transition duration-300 rounded-md shadow-lg bg-gradient-to-r from-pink-600 to-red-600" type="submit">
+              {isReviewPost?<div className="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-green-600 rounded-full" role="status" aria-label="loading"></div>:"Post"}
             </button>
           </form>
         </div>
@@ -405,12 +456,8 @@ function HotelDetailsPage(){
                       >
                           Close
                       </button>
-                      <button
-                          className="px-6 py-3 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-emerald-500 active:bg-emerald-600 hover:shadow-lg focus:outline-none"
-                          type="submit"
-                          // onClick={() => setShowModal(false)}
-                      >
-                          Book
+                      <button disabled={bookingLoader} className="w-20 h-10 px-5 py-2 mb-1 mr-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear rounded shadow outline-none bg-emerald-500 active:bg-emerald-600 hover:shadow-lg focus:outline-none"type="submit">
+                      {bookingLoader?(<div className="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-gray-800 rounded-full dark:text-white" role="status" aria-label="loading"></div>):("Book")}
                       </button>
                   </div>
                   </form>
