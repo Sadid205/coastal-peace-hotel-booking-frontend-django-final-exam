@@ -115,7 +115,7 @@ function BookingHistoryPage(){
     return (
         <div className="w-full overflow-x-auto">
         <div><Toaster/></div>
-        <h1 className="font-bold text-center">Booking History</h1>
+        <h1 className="font-bold text-center">Booking Histories</h1>
             {isLoading?(
             <table className="w-10/12 m-auto">
                  <thead>
