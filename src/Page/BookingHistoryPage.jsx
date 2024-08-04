@@ -27,8 +27,10 @@ function BookingHistoryPage(){
                 setIsLoading(true)
                 const booking_history = await fetch(`https://coastal-peace-hotel-booking.onrender.com/booking/list/?guest_id=${guestId}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const response_data = await booking_history.json()
-                if (response_data && response_data.length>0){
+                if(response_data){
                     setIsLoading(false)
+                }
+                if (response_data && response_data.length>0){
                     response_data.map((booked_hotel)=>{
                         setBookingHistory(prevState=>({
                             ...prevState,
@@ -111,11 +113,11 @@ function BookingHistoryPage(){
        
     }
     return (
-        <>
+        <div className="w-full overflow-x-auto">
         <div><Toaster/></div>
         <h1 className="font-bold text-center">Booking History</h1>
             {isLoading?(
-            <table>
+            <table className="w-10/12 m-auto">
                  <thead>
                     <tr>
                     <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50/50">
@@ -246,8 +248,7 @@ function BookingHistoryPage(){
                </tbody>
             </table>
                 
-            ):(<div className="p-6 px-0 overflow-scroll">
-                <table className="w-full text-left table-auto min-w-max">
+            ):(<table className="w-10/12 m-auto">
                 <thead>
                     <tr>
                     <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50/50">
@@ -420,8 +421,7 @@ function BookingHistoryPage(){
                 </td>
                 </tr>)}
                 </tbody>
-                </table>
-            </div>)}
+                </table>)}
     {showModal.is_show ? (
           <>
             <div
@@ -467,7 +467,7 @@ function BookingHistoryPage(){
             <div className="fixed inset-0 z-40 bg-black opacity-25"></div>
           </>
         ) : null}
-</>
+</div>
     )
 }
 
