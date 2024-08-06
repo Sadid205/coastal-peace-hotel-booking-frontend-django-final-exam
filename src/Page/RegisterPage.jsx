@@ -54,10 +54,8 @@ function RegisterPage(){
     return (
     <>
     <div><Toaster/></div>
-    <section className="relative py-20 overflow-hidden bg-gray-800 2xl:py-40">
-        <img className="absolute inset-0 hidden mt-32 lg:block" src="zospace-assets/lines/line-mountain.svg" alt />
-        <img className="absolute inset-y-0 right-0 hidden -mt-32 -mr-40 lg:block" src="zospace-assets/lines/line-right-long.svg" alt />
-        <div className="container relative px-4 mx-auto">
+    <section className="py-20 overflow-hidden bg-gray-800 -z-50 2xl:py-40">
+        <div className="container px-4 mx-auto">
             <div className="max-w-5xl mx-auto">
             <div className="flex flex-wrap items-center -mx-4">
                 <div className="w-full px-4 mb-16 lg:w-1/2 lg:mb-0">
