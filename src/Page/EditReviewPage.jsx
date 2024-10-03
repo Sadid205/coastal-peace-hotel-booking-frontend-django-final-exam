@@ -13,7 +13,7 @@ const EditReviewPage=()=>{
         const getReviewData= async()=>{
         try{
         setIsLoadReview(true)
-        const user_review = await fetch(`https://coastal-peace-hotel-booking.onrender.com/reviews/list/${review_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+        const user_review = await fetch(`https://cph-hotel-booking.vercel.app/reviews/list/${review_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
         const review_data = await user_review.json()
         if(review_data){
           setReview(review_data)
@@ -38,7 +38,7 @@ const EditReviewPage=()=>{
         e.preventDefault()
        try{
           setIsLoading(true)
-          const updateRequest =  await fetch(`https://coastal-peace-hotel-booking.onrender.com/reviews/list/${review_id}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+          const updateRequest =  await fetch(`https://cph-hotel-booking.vercel.app/reviews/list/${review_id}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
           body:JSON.stringify({
             hotel:hotel_id,
             reviewer:guestId,

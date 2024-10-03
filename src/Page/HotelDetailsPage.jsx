@@ -76,7 +76,7 @@ function HotelDetailsPage(){
         const getDetails = async()=>{
            try{
             setIsLoading(true)
-            const response = await fetch(`https://coastal-peace-hotel-booking.onrender.com/hotel/list/${hotel_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const response = await fetch(`https://cph-hotel-booking.vercel.app/hotel/list/${hotel_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const data = await response.json()
             if(data){
               setHotelDetails(data)
@@ -88,19 +88,19 @@ function HotelDetailsPage(){
         }
         const getReviews = async()=>{
           try{
-            const hotelReviews = await fetch(`https://coastal-peace-hotel-booking.onrender.com/reviews/list/?hotel_id=${hotel_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const hotelReviews = await fetch(`https://cph-hotel-booking.vercel.app/reviews/list/?hotel_id=${hotel_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const reviewData = await hotelReviews.json()
             setHotelReviews(reviewData)
             reviewData.forEach(async(single_reviewer)=>{
               try{
-                const user_data = await fetch(`https://coastal-peace-hotel-booking.onrender.com/guest/user/?guest_id=${single_reviewer.reviewer}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const user_data = await fetch(`https://cph-hotel-booking.vercel.app/guest/user/?guest_id=${single_reviewer.reviewer}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const responseUserData = await user_data.json()
                 setReviewer(prevState=>({
                   ...prevState,
                   [single_reviewer.reviewer]:responseUserData
                 }))
     
-                const  guest_data = await fetch(`https://coastal-peace-hotel-booking.onrender.com/guest/list/${single_reviewer.reviewer}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const  guest_data = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/${single_reviewer.reviewer}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const responseGuestData = await guest_data.json()
                 setGuestReviewer(prevState=>({
                   ...prevState,
@@ -117,7 +117,7 @@ function HotelDetailsPage(){
         }
         const getGuestAccount=async()=>{
           try{
-            const guestAccount = await fetch(`https://coastal-peace-hotel-booking.onrender.com/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const guestAccount = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const guestData = await guestAccount.json()
             setGuestId(guestData[0].id)
           }
@@ -127,7 +127,7 @@ function HotelDetailsPage(){
         }
         const setBookingListMethod=async()=>{
         try{
-          const bookedList = await fetch(`https://coastal-peace-hotel-booking.onrender.com/booking/list/?hotel_id=${hotel_id?hotel_id:""}&guest_id=${guestId?guestId:""}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+          const bookedList = await fetch(`https://cph-hotel-booking.vercel.app/booking/list/?hotel_id=${hotel_id?hotel_id:""}&guest_id=${guestId?guestId:""}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
           const bookedResponse = await bookedList.json()
           setBookingList(bookedResponse)
         }catch(e){
@@ -170,7 +170,7 @@ function HotelDetailsPage(){
         e.preventDefault()
         try{
         setBookingLoader(true)
-        const bookingRequest = await fetch(`https://coastal-peace-hotel-booking.onrender.com/booking/${hotel_id}/`,{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+        const bookingRequest = await fetch(`https://cph-hotel-booking.vercel.app/booking/${hotel_id}/`,{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
           body:JSON.stringify({
               number_of_guests:guestNumber,
               room_type:roomTypes
@@ -201,7 +201,7 @@ function HotelDetailsPage(){
     e.preventDefault()
     try{
       setIsReviewPost(true)
-      const postReview = await fetch('https://coastal-peace-hotel-booking.onrender.com/reviews/list/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+      const postReview = await fetch('https://cph-hotel-booking.vercel.app/reviews/list/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
         body:JSON.stringify({
           reviewer:guestId,
           hotel:hotel_id,

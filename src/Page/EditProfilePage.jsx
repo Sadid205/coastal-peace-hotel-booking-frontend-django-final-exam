@@ -17,7 +17,7 @@ function EditProfilePage(){
       e.preventDefault()
         try{
           setIsLoading(true)
-           const response =  await fetch('https://coastal-peace-hotel-booking.onrender.com/guest/edit_profile/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+           const response =  await fetch('https://cph-hotel-booking.vercel.app/guest/edit_profile/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
             body:JSON.stringify({
                 username:profile.username,
                 first_name:profile.first_name,
@@ -37,7 +37,7 @@ function EditProfilePage(){
     useEffect(()=>{
         const profileData = async()=>{
            try{
-            const Data = await fetch('https://coastal-peace-hotel-booking.onrender.com/guest/edit_profile',{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const Data = await fetch('https://cph-hotel-booking.vercel.app/guest/edit_profile',{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const ProfileData = await Data.json()
             setProfile(ProfileData)
            }catch(e){

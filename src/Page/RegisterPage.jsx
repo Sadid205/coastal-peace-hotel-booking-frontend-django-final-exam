@@ -18,6 +18,7 @@ function RegisterPage(){
     const [mobileNumber,setMobileNumber] = useState('')
     const [errors,setErrors] = useState('');
     const [isLoading,setIsLoading] = useState(false)
+    const [adminRequest,setAdminRequest] = useState(false)
     const RegisterHandler = async(e)=>{
         e.preventDefault()
         const formData = new FormData()
@@ -29,9 +30,10 @@ function RegisterPage(){
         formData.append("password",password)
         formData.append("confirm_password",confirmPassword)
         formData.append("mobile_number",mobileNumber)
+        formData.append("admin_request",adminRequest)
         try{
             setIsLoading(true)
-            const response = await axios.post('https://coastal-peace-hotel-booking.onrender.com/guest/register/',formData,{headers:{"Content-Type":"multipart/form-data"}})
+            const response = await axios.post('https://cph-hotel-booking.vercel.app/guest/register/',formData,{headers:{"Content-Type":"multipart/form-data"}})
             const data = response.data
             if(data){
                 setIsLoading(false)
@@ -46,6 +48,7 @@ function RegisterPage(){
             setPassword('')
             setConfirmPassword('')
             setMobileNumber('')
+            setAdminRequest(false)
         }
         catch(e){
             console.log(e)
@@ -115,6 +118,26 @@ function RegisterPage(){
                         <FaPhone/>
                         </span>
                         <input required value={mobileNumber} onChange={(e)=>setMobileNumber(e.target.value)} className="w-full py-4 pl-4 pr-6 font-bold placeholder-gray-900 rounded-r-full focus:outline-none" type="text" placeholder={errors.mobile_number?errors.mobile_number[0]:"Mobile Number"} />
+                    </div>
+                    <div class="inline-flex items-center">
+                    <label class="flex items-center cursor-pointer relative" for="check-2">
+                        <input type="checkbox"
+                        value={adminRequest}
+                        onChange={(e)=>setAdminRequest(true)}
+                        class="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
+                        id="check-2" />
+                        <span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor"
+                            stroke="currentColor" stroke-width="1">
+                            <path fill-rule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clip-rule="evenodd"></path>
+                        </svg>
+                        </span>
+                    </label>
+                    <label class="cursor-pointer ml-2 text-white font-bold text-sm" for="check-2">
+                        Request for admin account
+                    </label>
                     </div>                    
                     <button disabled={isLoading} type="submit" className="relative inline-flex items-center justify-center w-full px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-full group">
                         <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-green-500 rounded-full group-hover:w-full group-hover:h-full" />

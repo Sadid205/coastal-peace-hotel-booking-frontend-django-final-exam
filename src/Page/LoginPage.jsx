@@ -12,7 +12,7 @@ const LoginMethod = async(e)=>{
     e.preventDefault()
     try{
         setIsLoading(true)
-        const response = await axios.post('https://coastal-peace-hotel-booking.onrender.com/guest/login/',{username,password},{headers:{'Content-Type':'application/json'}})
+        const response = await axios.post('https://cph-hotel-booking.vercel.app/guest/login/',{username,password},{headers:{'Content-Type':'application/json'}})
         const data = response.data;
         if(data){
           setIsLoading(false)

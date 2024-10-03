@@ -12,11 +12,11 @@ const ProfilePage = ()=>{
         const getProfileData = async()=>{
            try{
             setIsLoading(true)
-            const guest = await fetch(`https://coastal-peace-hotel-booking.onrender.com/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const guest = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const guestData = await guest.json()
-            const user = await fetch(`https://coastal-peace-hotel-booking.onrender.com/guest/user/${user_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const user = await fetch(`https://cph-hotel-booking.vercel.app/guest/user/${user_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const userData = await user.json()
-            const account = await fetch(`https://coastal-peace-hotel-booking.onrender.com/accounts/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const account = await fetch(`https://cph-hotel-booking.vercel.app/accounts/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const accountData = await account.json()
             if(guestData&&userData&&accountData){
                 setGuestUserData(guestData)

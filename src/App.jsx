@@ -11,13 +11,20 @@ import './App.css'
 import DepositPage from "./Page/DepositPage"
 import EditReviewPage from "./Page/EditReviewPage"
 import { Footer } from "./components/Footer"
-import ProtectedRoute from "./components/ProtectedRoute"
+import ProtectedRoute, { AdminPanelProtectedRoute } from "./components/ProtectedRoute"
 import BookingHistoryPage from "./Page/BookingHistoryPage"
 import {SearchContextProvider} from "./context/SearchContext"
-const token = localStorage.getItem("Token")
+import AdminPanel from "./Page/AdminPanel"
+import AddHotel from "./Page/AddHotel"
+import AdminRequest from "./Page/AdminRequest"
+import AdminList from "./Page/AdminList"
+import UserList from "./Page/UserList"
+
+
 
 function App() {
-
+  const token = localStorage.getItem("Token")
+  const user_id = localStorage.getItem("user_id")
   return (
     <SearchContextProvider>
       <BrowserRouter>
@@ -60,6 +67,32 @@ function App() {
             <ProtectedRoute token={token}>
               <BookingHistoryPage/>
             </ProtectedRoute>
+          }/>
+          <Route path="/admin_panel" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <AdminPanel/>
+            </AdminPanelProtectedRoute>
+          }/>
+          <Route path="/add_hotel" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <AddHotel/>
+            </AdminPanelProtectedRoute>
+
+          }/>
+          <Route path="/admin_request" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <AdminRequest/>
+            </AdminPanelProtectedRoute>
+          }/>
+          <Route path="/admin_list" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <AdminList/>
+            </AdminPanelProtectedRoute>  
+          }/>
+          <Route path="/user_list" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <UserList/>
+            </AdminPanelProtectedRoute>  
           }/>
         </Routes>
         <Footer/>

@@ -8,7 +8,7 @@ const DepositPage = ()=>{
     const depositHandle = async(e)=>{
         e.preventDefault()
         setIsLoading(true)
-        const response = await fetch('https://coastal-peace-hotel-booking.onrender.com/accounts/deposit/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+        const response = await fetch('https://cph-hotel-booking.vercel.app/accounts/deposit/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
             body:JSON.stringify({
                 amount:deposit
                 })

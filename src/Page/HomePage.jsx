@@ -14,7 +14,7 @@ function HomePage(){
     useEffect(()=>{
        const getHotelList = async()=>{
         try{
-            const response = await fetch(`https://coastal-peace-hotel-booking.onrender.com/hotel/list/?page=${page}&search=${searchValue}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const response = await fetch(`https://cph-hotel-booking.vercel.app/hotel/list/?page=${page}&search=${searchValue}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const data = await response.json()
             if (data){
                 setHotelData(data)
@@ -48,7 +48,7 @@ function HomePage(){
         }
         return buttons
     }
-    console.log(hotelData)
+    // console.log(hotelData)
     return (
 <div>
 {token&&user_id?<div><div className="flex flex-wrap gap-3">

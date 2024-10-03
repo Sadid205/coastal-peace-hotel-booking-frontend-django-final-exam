@@ -13,6 +13,8 @@ const Header = () => {
   const [userData,setUserData] = useState(null)
   const [isLoading,setIsLoading] = useState(false)
   const [searchData,setSearchData] = useState('')
+  const [isAdmin,setIsAdmin] = useState(null)
+  const [isMasterAdmin,setIsMasterAdmin] = useState(null)
   const token = localStorage.getItem("Token")
   const user_id = localStorage.getItem("user_id")
   const Links = [
@@ -24,6 +26,9 @@ const Header = () => {
     Links.push({ name: "Deposit", link: "/deposit" })
     Links.push({ name: "Booking-History", link: "/booking_history" })
   }
+  if(isAdmin===true || isMasterAdmin===true){
+    Links.push({ name: "Admin Panel", link: "/admin_panel" })
+  }
   const {setSearchValue} = useContext(CreateSearchContext)
   const handleSearchValue = (e)=>{
     e.preventDefault()
@@ -33,7 +38,7 @@ const Header = () => {
   useEffect(()=>{
     const fetchData = async()=>{
       try{
-        const getUser = await fetch(`https://coastal-peace-hotel-booking.onrender.com/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+        const getUser = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
         if (!getUser.ok){
           throw new Error(`HTTP error! status: ${getUser.status}`)
         }
@@ -43,14 +48,37 @@ const Header = () => {
         console.log(e)
       }
     }
+    const get_guest_or_admin = async()=>{
+      try{
+        const guest_or_admin_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+        const guest_or_admin_response = await guest_or_admin_request.json()
+
+      //   console.log(guest_or_admin_response[0])
+      //   console.log(guest_or_admin_response.is_admin)
+        if(token && guest_or_admin_response[0].is_admin===true){
+          setIsAdmin(true)
+        }else{
+          setIsAdmin(false)
+        }
+        if(token && guest_or_admin_response[0].is_master_admin===true){
+          setIsMasterAdmin(true)
+        }else{
+          setIsMasterAdmin(false)
+        }
+      }catch(e){
+        console.log(e)
+        setIsAdmin(false)
+      }
+    }
     if (user_id && token){
       fetchData()
+      get_guest_or_admin()
     }
   },[user_id,token])
   const LogoutHandler = async()=>{
     try{
       setIsLoading(true)
-      const response = await fetch('https://coastal-peace-hotel-booking.onrender.com/guest/logout/',{method:"GET",headers:{Authorization:`Token ${token}`,"Content-Type":"application/json"}})
+      const response = await fetch('https://cph-hotel-booking.vercel.app/logout/',{method:"GET",headers:{Authorization:`Token ${token}`,"Content-Type":"application/json"}})
       const value = await response.json()
       if (value.Success){
         setIsLoading(false)
@@ -73,6 +101,7 @@ const Header = () => {
   const handleClick = () => {
     setOpen(!open);
   };
+  
   return (
     <div className="z-50 mb-5 bg-gray-700 shadow-md ">
       <div><Toaster/></div>

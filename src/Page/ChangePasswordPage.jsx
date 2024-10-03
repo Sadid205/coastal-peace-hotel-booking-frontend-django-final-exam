@@ -19,7 +19,7 @@ function ChangePasswordPage(){
         e.preventDefault()
         try{
             setIsLoading(true)
-            const response = await fetch(`https://coastal-peace-hotel-booking.onrender.com/guest/change_password/${user_id}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+            const response = await fetch(`https://cph-hotel-booking.vercel.app/guest/change_password/${user_id}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
                 body:JSON.stringify({
                     old_password:changePassword.old_password,
                     new_password:changePassword.new_password,
