@@ -48,7 +48,7 @@ const AddHotel = ()=>{
         }catch(e){
             setIsLoading(false)
             console.log(e)
-            toast.error("An unexpected error occurred.");
+            toast.error("An unexpected error occurred!");
         }
         // console.log({
         //     "name":name,
