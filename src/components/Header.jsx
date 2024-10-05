@@ -78,7 +78,7 @@ const Header = () => {
   const LogoutHandler = async()=>{
     try{
       setIsLoading(true)
-      const response = await fetch('https://cph-hotel-booking.vercel.app/logout/',{method:"GET",headers:{Authorization:`Token ${token}`,"Content-Type":"application/json"}})
+      const response = await fetch('https://cph-hotel-booking.vercel.app/guest/logout/',{method:"GET",headers:{Authorization:`Token ${token}`,"Content-Type":"application/json"}})
       const value = await response.json()
       if (value.Success){
         setIsLoading(false)
