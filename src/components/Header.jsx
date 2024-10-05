@@ -120,7 +120,7 @@ const Header = () => {
           <ul className="md:flex md:ml-24">
             {Links.map((item, index) => (
               <li className="md:ml-3" key={index}>
-                <Link className="font-bold text-gray-900" to={item.link}>{item.name}</Link>
+                <Link className="font-bold text-white" to={item.link}>{item.name}</Link>
               </li>
             ))}
           </ul>
