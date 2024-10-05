@@ -1,14 +1,19 @@
 import { useContext, useEffect, useState } from "react";
 import { FaHotel } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
+import { AiTwotoneDelete } from "react-icons/ai";
+import { FaEdit } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import CreateSearchContext from "../context/SearchContext";
 import not_found from "../assets/not_found.png"
+import toast,{ Toaster } from "react-hot-toast";
 function HomePage(){
     const token = localStorage.getItem("Token")
     const user_id = localStorage.getItem("user_id")
     const [hotelData,setHotelData] = useState(null)
+    const [isLoading,setIsLoading] = useState(false)
+    const [guestOrAdmin,setGuestOrAdmin] = useState()
     let [page,setPage] = useState(1)
     const {searchValue} = useContext(CreateSearchContext)
     useEffect(()=>{
@@ -23,12 +28,36 @@ function HomePage(){
             console.log(e)
         }
        }
-
+       const guest_or_admin_account = async()=>{
+        try{
+            const guest_or_admin_account_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const guest_or_admin_account_response = await guest_or_admin_account_request.json()
+            setGuestOrAdmin(guest_or_admin_account_response[0])
+        }catch(e){
+            console.log(e)
+        }
+    }
        if(token && user_id){
         getHotelList()
+        guest_or_admin_account()
        }
 
-    },[token,user_id,page,searchValue])
+    },[token,user_id,page,searchValue,isLoading])
+    const handleDelete = async(e,hotel_id)=>{
+        e.preventDefault()
+        try{
+            setIsLoading(true)
+            const delete_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/list/${hotel_id}/`,{method:"DELETE",headers:{'Authorization':`Token ${token}`}})
+            toast.success("Successfully deleted hotel.")
+            setIsLoading(false)
+        }catch(e){
+            setIsLoading(false)
+            console.log(e)
+            toast.error("Unexcepted error occurred!")
+        }
+    }
+    console.log(user_id)
+    console.log(guestOrAdmin)
     const nextPrevButton = ()=>{
         let buttons = [];
         if (hotelData){
@@ -48,9 +77,10 @@ function HomePage(){
         }
         return buttons
     }
-    // console.log(hotelData)
+    // console.log(hotelData.results[0].id)
     return (
 <div>
+<Toaster/>
 {token&&user_id?<div><div className="flex flex-wrap gap-3">
     {hotelData && hotelData.results.length>0?hotelData.results.map((hotel,index)=>(
         <div key={index} className="flex flex-col w-full max-w-xs m-auto overflow-hidden bg-white border border-gray-100 rounded-lg shadow-md">
@@ -59,7 +89,15 @@ function HomePage(){
         </div>
         <div className="px-5 pb-5 mt-4">
             <a href="#">
+            <div className="flex justify-between">
             <h5 className="text-xl tracking-tight text-slate-900">{hotel.name.slice(0,30)}</h5>
+                {(guestOrAdmin&&(guestOrAdmin.is_admin===true||guestOrAdmin.is_master_admin===true))?(
+                    <div className="flex items-center gap-2">
+                    <Link to={`/edit_hotel/${hotel.id}`}><FaEdit /></Link>
+                    <button onClick={(e)=>handleDelete(e,hotel.id)}><AiTwotoneDelete /></button>
+                </div>
+                ):("")}
+            </div>
             <div className="flex font-bold">
                 <p className="text-sm"><FaLocationDot /></p>
                 <p>{hotel.location.slice(0,30)}</p>

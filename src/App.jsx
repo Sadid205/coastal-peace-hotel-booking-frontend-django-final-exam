@@ -19,6 +19,7 @@ import AddHotel from "./Page/AddHotel"
 import AdminRequest from "./Page/AdminRequest"
 import AdminList from "./Page/AdminList"
 import UserList from "./Page/UserList"
+import EditHotelPage from "./Page/EditHotelPage"
 
 
 
@@ -92,6 +93,11 @@ function App() {
           <Route path="/user_list" element={
              <AdminPanelProtectedRoute token={token} user_id={user_id}>
              <UserList/>
+            </AdminPanelProtectedRoute>  
+          }/>
+          <Route path="/edit_hotel/:hotel_id" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <EditHotelPage/>
             </AdminPanelProtectedRoute>  
           }/>
         </Routes>

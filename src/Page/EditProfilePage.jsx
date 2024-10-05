@@ -2,28 +2,25 @@ import { useEffect, useState } from "react"
 import toast,{ Toaster } from "react-hot-toast";
 function EditProfilePage(){
     const token = localStorage.getItem("Token")
-    // const user_id = localStorage.getItem("user_id")
-    const [profile,setProfile] = useState(null)
+    const user_id = localStorage.getItem("user_id")
+    const [profile,setProfile] = useState({})
     const [isLoading,setIsLoading] = useState(false)
-    const handleUpdate = (e)=>{
-        e.preventDefault()
-        setProfile({
-            ...profile,
-            [e.target.name]:e.target.value
-        })
 
-    }
+    // isImage(profile?.image)
+    // console.log(isImage)
+    
     const handleEditPost = async(e)=>{
       e.preventDefault()
+      const formData = new FormData()
+      formData.append("username",profile.username)
+      formData.append("first_name",profile.first_name)
+      formData.append("last_name",profile.last_name)
+      formData.append("email",profile.email)
+      formData.append("updated_image",profile.image)
         try{
           setIsLoading(true)
-           const response =  await fetch('https://cph-hotel-booking.vercel.app/guest/edit_profile/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
-            body:JSON.stringify({
-                username:profile.username,
-                first_name:profile.first_name,
-                last_name:profile.last_name,
-                email:profile.email
-                })
+           const response =  await fetch(`https://cph-hotel-booking.vercel.app/guest/edit_profile/${user_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`},
+            body:formData
             })
            const data = await response.json()
            if(data){
@@ -37,9 +34,10 @@ function EditProfilePage(){
     useEffect(()=>{
         const profileData = async()=>{
            try{
-            const Data = await fetch('https://cph-hotel-booking.vercel.app/guest/edit_profile',{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const Data = await fetch(`https://cph-hotel-booking.vercel.app/guest/edit_profile/${user_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const ProfileData = await Data.json()
             setProfile(ProfileData)
+            console.log(profileData)
            }catch(e){
             console.log(e)
            }
@@ -48,6 +46,23 @@ function EditProfilePage(){
             profileData()
         }
     },[token])
+    const handleUpdate = (e)=>{
+      e.preventDefault()
+      if (e.target.name==='image' && e.target.files.length>0){
+        setProfile({
+          ...profile,
+          imagePreview:URL.createObjectURL(e.target.files[0]),
+          image:e.target.files[0]
+        })
+      }else{
+        setProfile({
+            ...profile,
+            [e.target.name]:e.target.value
+        })
+      }
+
+  }
+    // console.log(profile)
     return (
 <>
 <div><Toaster/></div>
@@ -59,6 +74,13 @@ function EditProfilePage(){
           Update Your Profile
         </h1>
         <form onSubmit={handleEditPost} className="space-y-4 md:space-y-6" action="#">
+          <div className="flex justify-center">
+            <img  className="rounded-full w-28 h-28 border" src={profile?.imagePreview?profile.imagePreview:profile.image} alt="image" />
+          </div>
+            <label className="text-white font-bold" htmlFor="profile_image">
+              Change Image
+              <input name="image" onChange={(e)=>handleUpdate(e)} id="profile_image" type="file" accept="image/*" />
+            </label>
           <div>
             <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Username</label>
             <input value={profile?profile.username:""} onChange={(e)=>handleUpdate(e)} type="text" name="username" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>

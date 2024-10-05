@@ -8,6 +8,7 @@ import image from '../assets/profile.jpeg'
 import { FaEdit } from "react-icons/fa";
 import toast,{ Toaster } from "react-hot-toast";
 import { CgUnavailable } from "react-icons/cg";
+import { AiOutlineDelete } from "react-icons/ai";
 function HotelDetailsPage(){
     const {hotel_id} = useParams()
     const token = localStorage.getItem("Token")
@@ -27,7 +28,7 @@ function HotelDetailsPage(){
     const [isLoading,setIsLoading] = useState(false)
     const [hasStayedAt,setHasStayedAt] = useState(false)
     const [bookingLoader,setBookingLoader] = useState(false)
-
+    const [deleteLoader,setDeleteLoader] = useState(false)
     const slider = useRef(null)
     const next = ()=>{
         slider?.current.slickNext();
@@ -143,7 +144,7 @@ function HotelDetailsPage(){
         if(guestId){
           setBookingListMethod()
         } 
-    },[token,hotel_id,user_id,guestId,isReviewPost]);
+    },[token,hotel_id,user_id,guestId,isReviewPost,deleteLoader]);
     useEffect(()=>{
       const stayed_at=()=>{
         if (bookingList && bookingList.length>=1){
@@ -216,6 +217,19 @@ function HotelDetailsPage(){
         }
     }catch(e){
       console .log(e)
+    }
+   }
+   const delete_review_handler = async(e,review_id)=>{
+    e.preventDefault()
+    try{
+      setDeleteLoader(true)
+      const delete_review_request = await fetch(`https://cph-hotel-booking.vercel.app/reviews/list/${review_id}/`,{method:"DELETE",headers:{'Authorization':`Token ${token}`}})
+      toast.success("Successfully deleted this reviews.")
+      setDeleteLoader(false)
+    }catch(e){
+      setDeleteLoader(false)
+      console.log(e)
+      toast.error("An unexpected error occurred!")
     }
    }
     return (
@@ -351,7 +365,12 @@ function HotelDetailsPage(){
               <p className="text-sm font-semibold text-slate-600">
                 Time : {item.review_date}
               </p>
-                {item.reviewer==guestId?<Link to={`/edit_review/${item.id}/${hotel_id}/${guestId}`}><span><FaEdit /></span></Link>:""}
+                {item.reviewer==guestId?(
+                  <div className="flex justify-between">
+                  <Link to={`/edit_review/${item.id}/${hotel_id}/${guestId}`}><span><FaEdit /></span></Link>
+                  <button onClick={(e)=>{delete_review_handler(e,item.id)}}><AiOutlineDelete /></button>
+                </div>
+                ):("")}
             </div>
           ))}
           {hotelReviews.length<2?<div></div>:""}

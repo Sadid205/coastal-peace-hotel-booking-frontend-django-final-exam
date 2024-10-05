@@ -9,7 +9,7 @@ const UserList = ()=>{
     useEffect(()=>{
         const get_user_list = async()=>{
             try{
-                const user_list_request = await fetch('http://127.0.0.1:8000/guest/user_list/',{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const user_list_request = await fetch('https://cph-hotel-booking.vercel.app/guest/user_list/',{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const user_list_response = await user_list_request.json()
                 setUserList(user_list_response.user_list)
             }catch(e){
@@ -18,7 +18,7 @@ const UserList = ()=>{
         }
         const get_guest_or_admin = async()=>{
             try{
-              const guest_or_admin_request = await fetch(`http://127.0.0.1:8000/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+              const guest_or_admin_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
               const guest_or_admin_response = await guest_or_admin_request.json()
     
             //   console.log(guest_or_admin_response[0])
