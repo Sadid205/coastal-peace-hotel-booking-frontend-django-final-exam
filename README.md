@@ -22,7 +22,7 @@ This is a Hotel Booking Management web application where general users can creat
 → Admins can confirm or cancel booking requests and can promote any user to admin or demote admins back to regular users. Admins can also approve or cancel admin requests.
 
 → You can visit my web application to explore these features and more.
-Link: https://main--enchanting-nougat-9e6718.netlify.app/
+Link: https://cph-booking.netlify.app/
 ## Technology
 React JS,TailwindCSS
 ## Installed Packages
