@@ -95,15 +95,15 @@ const AddHotel = ()=>{
           <label className="text-white font-bold dark:text-gray-200" htmlFor="rules">Rules</label>
           <textarea onChange={(e)=>setRules(e.target.value)} value={rules} required id="rules" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" />
         </div>
-        <div>
-            <label class="text-white dark:text-gray-200 font-bold" for="rating">Rating</label>
-            <select onChange={(e)=>setRating(e.target.value)} value={rating} required id="rating" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
-                <option>🌟</option>
-                <option>🌟🌟</option>
-                <option>🌟🌟🌟</option>
-                <option>🌟🌟🌟🌟</option>
-                <option>🌟🌟🌟🌟🌟</option>
-            </select>
+          <div>
+              <label class="text-white dark:text-gray-200 font-bold" for="rating">Rating</label>
+              <select onChange={(e)=>setRating(e.target.value)} value={rating} required id="rating" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring">
+                  <option>🌟</option>
+                  <option>🌟🌟</option>
+                  <option>🌟🌟🌟</option>
+                  <option>🌟🌟🌟🌟</option>
+                  <option>🌟🌟🌟🌟🌟</option>
+              </select>
             </div>
         <div>
           <label className="text-white dark:text-gray-200 font-bold" htmlFor="location">Location</label>
@@ -117,6 +117,13 @@ const AddHotel = ()=>{
           <label className="text-white dark:text-gray-200 font-bold" htmlFor="roomType">Room Type</label>
           <input onChange={(e)=>setRoomType(e.target.value)} value={roomType} required id="roomType" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" defaultValue={""} />
         </div>
+        <div className="border-dashed border-2 justify-center flex gap-2 flex-wrap">
+            {images?.map((item,index)=>{
+                const isFile = item instanceof File;
+                const image = isFile ? URL.createObjectURL(item) : "";
+                return (<img width={200} height={200} key={index} src={image}/>)
+          })}
+          </div>
         <div>
           <label className="block text-sm font-medium text-white">
             Image
@@ -157,3 +164,4 @@ const AddHotel = ()=>{
     )
 }
 export default AddHotel
+

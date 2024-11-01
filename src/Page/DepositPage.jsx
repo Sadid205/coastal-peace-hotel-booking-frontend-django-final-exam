@@ -1,10 +1,26 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import toast,{ Toaster } from "react-hot-toast";
+import { useLocation } from "react-router-dom";
 const DepositPage = ()=>{
     const token = localStorage.getItem("Token")
     const [deposit,setDeposit] = useState("")
     const [error,setError] = useState("")
     const [isLoading,setIsLoading] = useState(false)
+    const location = useLocation()
+    const queryParams = new URLSearchParams(location.search)
+    
+    useEffect(()=>{
+        const status_params = queryParams.get('status')
+        const is_success = queryParams.get('is_success')
+        if(is_success==="true")
+            toast.success(status_params)
+        else if(is_success==="false"){
+            toast.error(status_params)
+        }
+        queryParams.delete('status')
+        queryParams.delete('is_success')
+        window.history.replaceState(null,'',`${location.pathname}?${queryParams.toString()}`)
+    },[])
     const depositHandle = async(e)=>{
         e.preventDefault()
         setIsLoading(true)
@@ -20,10 +36,12 @@ const DepositPage = ()=>{
         if (data.Error){
             setError(data.Error)
             toast.error(data.Error)
+        }else if(data.redirect_url){
+            window.location.href = data.redirect_url
+        }else{
+            toast.success(data.status)
         }
-        else{
-            toast.success(data.Success)
-        }
+        // console.log(data)
     }
     return (
         <>

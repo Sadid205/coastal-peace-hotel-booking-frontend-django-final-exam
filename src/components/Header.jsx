@@ -103,7 +103,7 @@ const Header = () => {
   };
   
   return (
-    <div className="z-50 mb-5 bg-gray-700 shadow-md ">
+    <div className="z-50 relative mb-5 bg-gray-700 shadow-md ">
       <div><Toaster/></div>
       <div
         className={`md:flex pr-3 bg-gray-700 md:static transition-all ease-in duration-500 absolute p-2 md:shadow- md:shadow-none shadow-md w-screen md:container m-auto md:justify-between item-center ${

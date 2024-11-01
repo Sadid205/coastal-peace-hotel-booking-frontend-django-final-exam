@@ -72,7 +72,7 @@ function HotelDetailsPage(){
           },
         ],
       };
-    
+
     useEffect(()=>{
         const getDetails = async()=>{
            try{
@@ -282,7 +282,7 @@ function HotelDetailsPage(){
                   <div className="flex mb-4">
                   <div className="mr-4">
                       <span className="font-bold text-gray-700 dark:text-gray-300">Booking Price:</span>
-                      <span className="text-gray-600 dark:text-gray-300">{hotelDetails?hotelDetails.booking_price:""}$</span>
+                      <span className="text-gray-600 dark:text-gray-300">{hotelDetails&&hotelDetails.offer_price?(hotelDetails.offer_price):(hotelDetails&&hotelDetails.booking_price?(hotelDetails.booking_price):(""))}$</span>
                   </div>
                   <div>
                       <span className="font-bold text-gray-700 dark:text-gray-300">Number of rooms : </span>

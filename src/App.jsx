@@ -20,6 +20,18 @@ import AdminRequest from "./Page/AdminRequest"
 import AdminList from "./Page/AdminList"
 import UserList from "./Page/UserList"
 import EditHotelPage from "./Page/EditHotelPage"
+import AddBanner from "./Page/AddBanner"
+import CreateOffer from "./Page/CrateOffer"
+import CreateCategory from "./Page/CreateCategory"
+import AddBestRoom from "./Page/AddBestRoom"
+import CreateService from "./Page/CreateService"
+import SelectFeedBack from "./Page/SelectFeedBack"
+import BestRoomDetails from "./Page/BestRoomDetails"
+import ServiceDetails from "./Page/ServicesDetails"
+import AllBestRooms from "./Page/AllBestRooms"
+import AllOfferHotels from "./Page/AllOfferHotels"
+import AllCategoriesHotels from "./Page/AllCategoriesHotels"
+import AllServices from "./Page/AllServices"
 
 
 
@@ -50,6 +62,36 @@ function App() {
           <Route path="/hotel_details/:hotel_id"element={
             <ProtectedRoute token={token}>
               <HotelDetailsPage/>
+            </ProtectedRoute>
+          }/>
+          <Route path="/best_room_details/:room_id"element={
+            <ProtectedRoute token={token}>
+              <BestRoomDetails/>
+            </ProtectedRoute>
+          }/>
+          <Route path="/service_details/:service_id"element={
+            <ProtectedRoute token={token}>
+              <ServiceDetails/>
+            </ProtectedRoute>
+          }/>
+          <Route path="/all-best-rooms"element={
+            <ProtectedRoute token={token}>
+              <AllBestRooms/>
+            </ProtectedRoute>
+          }/>
+          <Route path="/all-offer-hotels"element={
+            <ProtectedRoute token={token}>
+              <AllOfferHotels/>
+            </ProtectedRoute>
+          }/>
+          <Route path="/all-categories-hotels"element={
+            <ProtectedRoute token={token}>
+              <AllCategoriesHotels/>
+            </ProtectedRoute>
+          }/>
+          <Route path="/all-services"element={
+            <ProtectedRoute token={token}>
+              <AllServices/>
             </ProtectedRoute>
           }/>
           <Route path="/login" element={<LoginPage/>}/>
@@ -98,6 +140,36 @@ function App() {
           <Route path="/edit_hotel/:hotel_id" element={
              <AdminPanelProtectedRoute token={token} user_id={user_id}>
              <EditHotelPage/>
+            </AdminPanelProtectedRoute>  
+          }/>
+          <Route path="/add_banner" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <AddBanner/>
+            </AdminPanelProtectedRoute>  
+          }/>
+          <Route path="/create_offer" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <CreateOffer/>
+            </AdminPanelProtectedRoute>  
+          }/>
+          <Route path="/create_category" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <CreateCategory/>
+            </AdminPanelProtectedRoute>  
+          }/>
+          <Route path="/add_best_room" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <AddBestRoom/>
+            </AdminPanelProtectedRoute>  
+          }/>
+          <Route path="/create_service" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <CreateService/>
+            </AdminPanelProtectedRoute>  
+          }/>
+          <Route path="/select_feedback" element={
+             <AdminPanelProtectedRoute token={token} user_id={user_id}>
+             <SelectFeedBack/>
             </AdminPanelProtectedRoute>  
           }/>
         </Routes>

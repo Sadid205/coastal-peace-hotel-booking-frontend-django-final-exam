@@ -3,11 +3,24 @@ import { Link } from "react-router-dom"
 import { TbArrowBadgeRight } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
 import toast,{ Toaster } from "react-hot-toast";
+import { TEChart } from "tw-elements-react";
+import { FaRegAddressBook } from "react-icons/fa";
+import { FaCodePullRequest } from "react-icons/fa6";
+import { FaThList } from "react-icons/fa";
+import { MdAddAPhoto } from "react-icons/md";
+import { IoIosCreate } from "react-icons/io";
+import { IoBagAddSharp } from "react-icons/io5";
+import { MdOutlineCreateNewFolder } from "react-icons/md";
+import { BiSolidSelectMultiple } from "react-icons/bi";
+
+
 
 const AdminPanel = ()=>{
     const [pendingBookingList,setPendingBookingList] = useState()
     const [bookingInfo,setBookingInfo] = useState()
     const [guestOrAdmin,setGuestOrAdmin] = useState()
+    const[revenue,setRevenue] = useState({})
+    const [bookingGraphData,setBookingGraphData] = useState([])
     const [confirmIsLoading,setConfirmIsLoading] = useState(false)
     const [cancelIsLoading,setCancelIsLoading] = useState(false)
     const token = localStorage.getItem("Token")
@@ -43,9 +56,30 @@ const AdminPanel = ()=>{
                 console.log(e)
             }
         }
+        const getBookingGraphData = async()=>{
+            try{
+                const request = await fetch("https://cph-hotel-booking.vercel.app/booking/daily-bookings/",{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const response = await request.json()
+                setBookingGraphData(response)
+            }catch(e){
+                console.log(e)
+            }
+        }
+        const getRevenue = async()=>{
+            try{
+                const request = await fetch("https://cph-hotel-booking.vercel.app/transactions/transaction-totals/",{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const response = await request.json()
+                setRevenue(response)
+            }catch(e){
+                console.log(e)
+            }
+        }
+        
         pending_booking_list()
         booking_information()
         guest_or_admin_account()
+        getBookingGraphData()
+        getRevenue()
     },[confirmIsLoading,cancelIsLoading])
     const confirm_booking_handler=async(e,booking_id)=>{
         e.preventDefault()
@@ -82,7 +116,9 @@ const AdminPanel = ()=>{
     // console.log(pendingBookingList)
     // console.log(bookingInfo)
     // console.log(guestOrAdmin)
+    // console.log(bookingGraphData)
     return (
+<div>
 <div className="md:flex bg-gray-300">
     <Toaster/>
         <div className="md:flex p-3 gap-3 m-auto">
@@ -91,55 +127,83 @@ const AdminPanel = ()=>{
                 </div>
                 <div style={{width:"250px"}} className={`absolute ${bar?"":"-ms-72"}  transition-all bg-gray-700 p-2 shadow border rounded-md`}>
                 <div className="absolute right-0 top-0">
-                    <button onClick={()=>setBar(false)} className="text-3xl"><RxCross2/></button>
+                    <button onClick={()=>setBar(false)} className="text-3xl text-white mr-2 mt-3"><RxCross2/></button>
                 </div>
-                   <div>
-                        <div className="hover:cursor-pointer rounded-md hover:bg-gray-400">
+                   <div className="overflow-y-auto max-h-screen">
+                        <div className="flex items-center px-2 hover:cursor-pointer py-4 rounded-md hover:bg-gray-400">
+                            <span className="text-white"><FaRegAddressBook /></span>
                             <Link to={"/add_hotel"} className="font-bold p-2 hover:text-black text-white">Add Hotel</Link>
                         </div>
                         {guestOrAdmin&&guestOrAdmin[0].is_master_admin==true?(
-                        <div className="hover:cursor-pointer rounded-md hover:bg-gray-400">
+                        <div className="hover:cursor-pointer px-2 py-4 flex items-center rounded-md hover:bg-gray-400">
+                            <span className="text-white"><FaCodePullRequest /></span>
                             <Link to={"/admin_request"} className="font-bold p-2 hover:text-black text-white">Admin Request</Link>
                         </div>
                         ):("")}
-                        <div className="hover:cursor-pointer rounded-md hover:bg-gray-400">
+                        <div className="flex items-center px-2 hover:cursor-pointer py-4 rounded-md hover:bg-gray-400">
+                            <span className="text-white"><FaThList /></span>
                             <Link to={"/admin_list"} className="font-bold p-2 hover:text-black text-white">Admin List</Link>
                         </div>
-                        <div className="hover:cursor-pointer rounded-md hover:bg-gray-400">
+                        <div className="flex items-center px-2 hover:cursor-pointer py-4 rounded-md hover:bg-gray-400">
+                            <span className="text-white"><FaThList /></span>
                             <Link to={"/user_list"} className="font-bold p-2 hover:text-black text-white">User List</Link>
+                        </div>
+                        <div className="flex items-center px-2 hover:cursor-pointer py-4 rounded-md hover:bg-gray-400">
+                            <span className="text-white"><MdAddAPhoto /></span>
+                            <Link to={"/add_banner"} className="font-bold p-2 hover:text-black text-white">Add Banner</Link>
+                        </div>
+                        <div className="hover:cursor-pointer px-2 flex items-center py-4 rounded-md hover:bg-gray-400">
+                            <span className="text-white"><IoIosCreate /></span>
+                            <Link to={"/create_offer"} className="font-bold p-2 hover:text-black text-white">Create Offer</Link>
+                        </div>
+                        <div className="hover:cursor-pointer px-2 flex items-center py-4 rounded-md hover:bg-gray-400">
+                            <span className="text-white"><IoIosCreate /></span>
+                            <Link to={"/create_category"} className="font-bold p-2 hover:text-black text-white">Create Category</Link>
+                        </div>
+                        <div className="flex items-center  px-2 hover:cursor-pointer py-4 rounded-md hover:bg-gray-400">
+                            <span className="text-white"><IoBagAddSharp /></span>
+                            <Link to={"/add_best_room"} className="font-bold p-2 hover:text-black text-white">Add Best Room</Link>
+                        </div>
+                        <div className="flex items-center  px-2 hover:cursor-pointer py-4 rounded-md hover:bg-gray-400">
+                            <span className="text-white"><MdOutlineCreateNewFolder /></span>
+                            <Link to={"/create_service"} className="font-bold p-2 hover:text-black text-white">Create Services</Link>
+                        </div>
+                        <div className="hover:cursor-pointer px-2 flex items-center py-4 rounded-md hover:bg-gray-400">
+                            <span className="text-white"><BiSolidSelectMultiple /></span>
+                            <Link to={"/select_feedback"} className="font-bold p-2 hover:text-black text-white">Select Feedback</Link>
                         </div>
                    </div>
                 </div>
                 <div>
-                    <div style={{height:"250px",width:"250px"}} className="rounded-md  border border-slate-300 shadow-2xl mt-3 mx-auto text-center">
+                    <div style={{height:"80px",width:"250px"}} className="rounded-md  border border-slate-300 shadow-2xl mt-3 mx-auto text-center">
                         <h1 className="font-bold">Total Bookings</h1>
-                        <div className="flex h-full items-center justify-center">
-                            <h1 className="font-bold text-6xl">{bookingInfo&&bookingInfo?bookingInfo.total_bookings:"0"}</h1>
-                        </div>
+                            <h1 className="font-bold text-3xl">{bookingInfo&&bookingInfo?bookingInfo.total_bookings:"0"}</h1>
                     </div>
-                    <div style={{height:"250px",width:"250px"}} className="rounded-md  border border-slate-300 shadow-2xl  mt-3 mx-auto text-center">
+                    <div style={{height:"80px",width:"250px"}} className="rounded-md  border border-slate-300 shadow-2xl  mt-3 mx-auto text-center">
                         <h1 className="font-bold">Total User</h1>
-                        <div className="flex h-full items-center justify-center">
-                            <h1 className="font-bold text-6xl">{bookingInfo&&bookingInfo?bookingInfo.total_user:"0"}</h1>
-                        </div>
+                            <h1 className="font-bold text-3xl">{bookingInfo&&bookingInfo?bookingInfo.total_user:"0"}</h1>
+                    </div>
+                    <div style={{height:"80px",width:"250px"}} className="rounded-md  border border-slate-300 shadow-2xl  mt-3 mx-auto text-center">
+                        <h1 className="font-bold">Weekly Revenue</h1>
+                            <h1 className="font-bold text-3xl">{revenue&&revenue.total_amount_this_week?revenue.total_amount_this_week:"0"} Taka</h1>
                     </div>
                 </div>
                <div>
-               <div style={{height:"250px",width:"250px"}} className="rounded-md border border-slate-300 shadow-2xl  mt-3 mx-auto text-center">
+               <div style={{height:"80px",width:"250px"}} className="rounded-md border border-slate-300 shadow-2xl  mt-3 mx-auto text-center">
                     <h1 className="font-bold">Booking Request</h1>
-                    <div className="flex h-full items-center justify-center">
-                        <h1 className="font-bold text-6xl">{bookingInfo&&bookingInfo?bookingInfo.total_booking_request:"0"}</h1>
-                    </div>
+                        <h1 className="font-bold text-3xl">{bookingInfo&&bookingInfo?bookingInfo.total_booking_request:"0"}</h1>
                 </div>
-                <div style={{height:"250px",width:"250px"}} className="rounded-md border border-slate-300 shadow-2xl mt-3 mx-auto text-center">
+                <div style={{height:"80px",width:"250px"}} className="rounded-md border border-slate-300 shadow-2xl mt-3 mx-auto text-center">
                 <h1 className="font-bold">Total Hotel</h1>
-                    <div className="flex h-full items-center justify-center">
-                        <h1 className="font-bold text-6xl">{bookingInfo&&bookingInfo?bookingInfo.total_hotel:"0"}</h1>
-                    </div>
+                        <h1 className="font-bold text-3xl">{bookingInfo&&bookingInfo?bookingInfo.total_hotel:"0"}</h1>
+                </div>
+                <div style={{height:"80px",width:"250px"}} className="rounded-md border border-slate-300 shadow-2xl mt-3 mx-auto text-center">
+                <h1 className="font-bold">Total Revenue</h1>
+                        <h1 className="font-bold text-3xl">{revenue&&revenue.total_amount?revenue.total_amount:"0"} Taka</h1>
                 </div>
                </div>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto max-h-screen overflow-y-auto">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -224,6 +288,23 @@ const AdminPanel = ()=>{
             </tbody>
         </table>
         </div>
+</div>
+<TEChart
+      type="bar"
+      darkTicksColor="#ff0000"
+      darkGridLinesColor="#ffff00"
+      darkLabelColor="#ff00ff"
+      data={{
+        labels: bookingGraphData.map((booking)=>booking[0]),
+        datasets: [
+          {
+            label: "Total Bookings",
+            data:bookingGraphData.map((booking)=>booking[1])
+          },
+        ],
+      }}
+      
+    />
 </div>
     )
 }
