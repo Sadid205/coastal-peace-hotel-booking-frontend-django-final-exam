@@ -55,7 +55,7 @@ const CreateOffer = ()=>{
                 </div>
                 <div style={{
                         boxShadow: 'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px'
-                        }} className=" md:w-3/5 m-auto bg-white border-gray-500  max-h-96 overflow-y-auto">
+                        }} className=" md:w-3/5 m-auto bg-white border-gray-500  max-h-screen overflow-y-auto">
                     <h1 className="text-gray-900 text-center font-bold text-2xl">Select Hotel</h1>
                     <p className="ms-2"><span className="font-bold">Selected Items : </span><span className="font-semibold">{selectedHotel.length}</span></p>
                     {hotel?hotel.map((item,index)=>{
