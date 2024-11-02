@@ -19,17 +19,20 @@ const SelectFeedBack = ()=>{
             getReview()
         }
     },[token])
-  console.log(reviews)
+//   console.log(reviews)
     const handleCreateFeedback = async (e)=>{
         e.preventDefault()
         const formData = new FormData()
-        formData.append("review_list",selectedReview)
         formData.append("feedback_name",feedbackName)
+        // formData.append("review_list",selectedReview)
+        selectedReview.forEach(review=>{
+            formData.append("review_list",review)
+        })
         const request =  await fetch('https://cph-hotel-booking.vercel.app/hotel/feedback/',{method:"POST",headers:{'Authorization':`Token ${token}`},
             body:formData
         })
         const response = await request.json()
-        // console.log(response)
+        console.log(response)
         if(response){
             toast.success("Successfully created a feedback!")
         }
