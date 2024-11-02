@@ -233,9 +233,11 @@ function HomePage(){
   </AutoplaySlider>
   ):("")
 }
+
 {token&&user_id?<div><div className="flex flex-wrap gap-3">
-    {hotelData && hotelData.results.length>0?hotelData.results.map((hotel,index)=>(
-        <div key={index} className="flex flex-col w-full max-w-xs m-auto overflow-hidden bg-white border border-gray-100 rounded-lg shadow-md">
+    {hotelData && hotelData.results.length>0?hotelData.results.map((hotel,index)=>{
+      if(hotel.offer_price===null && hotel.included_category===false){
+        return  <div key={index} className="flex flex-col w-full max-w-xs m-auto overflow-hidden bg-white border border-gray-100 rounded-lg shadow-md">
         <div className="flex mx-3 mt-3 overflow-hidden h-60 rounded-xl" href="#">
             <img width="100%" className="object-cover" src={hotel.images[0]?.image} alt="product image" />
         </div>
@@ -267,8 +269,10 @@ function HomePage(){
             <span className="mr-2 ">{<FaHotel/>}</span>
             Details</Link>
         </div>
-</div>
-    )):<div className="w-full text-center">
+    </div>
+      }
+    } 
+    ):<div className="w-full text-center">
         <img className="w-1/2 m-auto" src={not_found}/>
         <h1 className="text-gray-500">No search result found for <span className="font-bold">{searchValue}</span></h1>
     </div>
