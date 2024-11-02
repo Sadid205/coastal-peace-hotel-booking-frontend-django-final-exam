@@ -338,7 +338,7 @@ function HomePage(){
     </div>
 </div>
   ):("")}
-  <div className="flex flex-wrap overflow-y-auto max-h-96">
+  <div className="flex flex-wrap overflow-y-auto max-h-screen">
   {
       specialOffer && specialOffer.length>0?(
           specialOffer[specialOffer.length-1].hotel&&specialOffer[specialOffer.length-1].hotel.length>0?(
