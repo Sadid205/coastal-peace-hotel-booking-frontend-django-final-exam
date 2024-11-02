@@ -113,8 +113,9 @@ const Header = () => {
         {/* Left Side Section */}
         <div className="items-center p-3 md:flex">
           <div className="flex items-center">
+            <Link to={"/"}>
             <img className="text-gray-900" width={100} src={Logo} alt="logo" />
-            {/* <h1 className="ml-4 font-bold">CPH Booking</h1> */}
+            </Link>
           </div>
 
           <ul className="md:flex md:ml-24">
