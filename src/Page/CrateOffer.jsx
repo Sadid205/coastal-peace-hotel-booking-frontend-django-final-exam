@@ -28,17 +28,18 @@ const CreateOffer = ()=>{
         const formData = new FormData()
         formData.append("offer_name",offerName)
         formData.append("discount",discount)
-        formData.append("hotel_list",selectedHotel)
+        selectedHotel.forEach(hotel=>{
+            formData.append("hotel_list",hotel)
+        })
         const request =  await fetch('https://cph-hotel-booking.vercel.app/special_offer/list/',{method:"POST",headers:{'Authorization':`Token ${token}`},
             body:formData
         })
         const response = await request.json()
-        console.log(response)
         if(response){
             toast.success("Successfully created an Offer!")
         }
     }
-    console.log(hotel)
+    // console.log(hotel)
     return (
         <div className=" h-screen">
               <Toaster/>

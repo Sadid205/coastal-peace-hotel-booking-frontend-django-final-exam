@@ -338,7 +338,7 @@ function HomePage(){
     </div>
 </div>
   ):("")}
-  <div className="flex flex-wrap overflow-y-auto max-h-screen">
+  <div className="flex flex-wrap">
   {
       specialOffer && specialOffer.length>0?(
           specialOffer[specialOffer.length-1].hotel&&specialOffer[specialOffer.length-1].hotel.length>0?(
@@ -348,7 +348,7 @@ function HomePage(){
                   //         console.log(image_item.image)
                   //     })
                   // ):("")}
-                  return <div className="relative m-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+                  return <div className="relative m-auto flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
                   <a className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" href="#">
                     <img className="object-cover" src={item.images&&item.images.length>0?(item.images[0].image):("")} />
                     <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">{specialOffer[specialOffer.length-1].discount}% OFF</span>

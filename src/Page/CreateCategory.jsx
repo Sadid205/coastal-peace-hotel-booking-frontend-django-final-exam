@@ -22,16 +22,19 @@ const CreateCategory = ()=>{
     // {item&&item.images&&item.images.length>0?item.images[0].image:""}
     // console.log(hotel[0].images[0].image)
     // console.log(offerName,discount,selectedHotel)
+    console.log(selectedHotel)
     const handleCreateOffer = async (e)=>{
         e.preventDefault()
         const formData = new FormData()
         formData.append("category_name",categoryName)
-        formData.append("hotel_list",selectedHotel)
+        selectedHotel.forEach(hotel=>{
+            formData.append("hotel_list",hotel)
+        })
         const request =  await fetch('https://cph-hotel-booking.vercel.app/hotel/category/',{method:"POST",headers:{'Authorization':`Token ${token}`},
             body:formData
         })
         const response = await request.json()
-        // console.log(response)
+        console.log(response)
         if(response){
             toast.success("Successfully created a category!")
         }
