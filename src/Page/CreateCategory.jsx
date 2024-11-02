@@ -69,7 +69,7 @@ const CreateCategory = ()=>{
                                         <h1><span className="font-bold">Name : </span><span className="font-semibold">{item?item.name:""}</span></h1>
                                         <p><span className="font-bold">Details : </span> <span className="font-semibold">{item?item.details.slice(0,100):""}</span></p>
                                         <p><span className="font-bold">Location : </span><span className="font-semibold">{item?item.location:""}</span></p>
-                                        <p><span className="font-bold">Price : </span><span className="font-semibold">{item?item.price:""}</span></p>
+                                        <p><span className="font-bold">Price : </span><span className="font-semibold">{item?item.booking_price:""}</span></p>
                                         <p><span className="font-bold">Rating : </span>{item?item.rating:""}</p>
                                     </div>
                                 </div>
