@@ -33,7 +33,7 @@ const AllBestRooms = ()=>{
                         <p className="capitalize font-serif font-bold text-3xl text-center shadow-2xl text-white mt-10">{room?.room_name}</p>
                         </div>
                         <div className="absolute w-full flex place-content-center mt-20">
-                        <p className="font-sans font-semibold text-center w-4/5 text-white mt-5">{room?.description.slice(0,100)}</p>
+                        <p className="font-sans font-semibold text-center w-4/5 text-white mt-5">{room?.description.slice(0,30)}</p>
                         </div>
                         <div className="absolute w-full flex place-content-center mt-28">
                         <p className="font-sans font-semibold text-center w-4/5 text-white mt-5">Size : {room?.size}</p>
