@@ -19,7 +19,7 @@ const SelectFeedBack = ()=>{
             getReview()
         }
     },[token])
-  
+  console.log(reviews)
     const handleCreateFeedback = async (e)=>{
         e.preventDefault()
         const formData = new FormData()
@@ -61,7 +61,7 @@ const SelectFeedBack = ()=>{
                             }
                         })}} key={index} className={`flex border-b border-gray-400 ${selectedReview.some((id)=>id===item.id)?`bg-gray-700 text-white`:""} hover:cursor-pointer p-2 min-w-[800px]`}>
                                     <div className="w-1/5">
-                                        <img className="w-full h-full" src={item&&item.images&&item.images.length>0?item.guest_reviewer.image:""} alt="image" />
+                                        <img className="w-full h-full" src={item&&item.guest_reviewer?item.guest_reviewer.image:""} alt="image" />
                                     </div>
                                     <div className="p-2">
                                         <h1><span className="font-bold">Name : </span><span className="font-semibold">{item?item.user_data.first_name:""} {item?item.user_data.last_name:""}</span></h1>
