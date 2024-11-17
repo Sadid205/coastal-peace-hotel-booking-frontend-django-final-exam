@@ -37,6 +37,16 @@ const LoginMethod = async(e)=>{
   <>
   <div><Toaster/></div>
   <div className="flex flex-col justify-center min-h-screen py-6 bg-gray-100 sm:py-12">
+        <div style={{
+          boxShadow:
+          "rgba(0, 0, 0, 0.15) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+          }} className='w-96 m-auto bg-sky-400 p-3'>
+          <p><span className='font-semibold'>Username (Master Admin):</span> <span className=''>sadid_1914</span></p>
+          <p><span className='font-semibold'>Password (Master Admin):</span> <span>Naim12345</span></p>
+          <hr />
+          <p><span className='font-semibold'>Username (User):</span> <span className=''>rong_1914</span></p>
+          <p><span className='font-semibold'>Password (User):</span> <span>Naim12345</span></p>
+        </div>
   <div className="relative py-3 sm:max-w-xl sm:mx-auto">
     <div className="absolute inset-0 transform -skew-y-6 shadow-lg bg-gradient-to-r from-cyan-400 to-sky-500 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl" />
     <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
