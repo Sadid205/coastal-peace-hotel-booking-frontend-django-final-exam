@@ -29,7 +29,7 @@ const AdminPanel = ()=>{
     useEffect(()=>{
         const guest_or_admin_account = async()=>{
             try{
-                const guest_or_admin_account_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id?=${user_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const guest_or_admin_account_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const guest_or_admin_account_response = await guest_or_admin_account_request.json()
                 setGuestOrAdmin(guest_or_admin_account_response)
             }catch(e){
