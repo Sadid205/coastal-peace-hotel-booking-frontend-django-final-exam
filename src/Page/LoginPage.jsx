@@ -40,7 +40,7 @@ const LoginMethod = async(e)=>{
         <div style={{
           boxShadow:
           "rgba(0, 0, 0, 0.15) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
-          }} className='w-96 m-auto bg-sky-400 p-3'>
+          }} className='w-96 mb-8 mx-auto bg-sky-400 p-3'>
           <p><span className='font-semibold'>Username (Master Admin):</span> <span className=''>sadid_1914</span></p>
           <p><span className='font-semibold'>Password (Master Admin):</span> <span>Naim12345</span></p>
           <hr />
