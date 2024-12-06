@@ -6,6 +6,7 @@ function ChangePasswordPage(){
     const token = localStorage.getItem("Token")
     const [changePassword,setChangePassword] = useState({})
     const [isLoading,setIsLoading] = useState(false)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const passwordEventHandler = (e)=>{
         e.preventDefault()
         setChangePassword(
@@ -19,7 +20,7 @@ function ChangePasswordPage(){
         e.preventDefault()
         try{
             setIsLoading(true)
-            const response = await fetch(`https://cph-hotel-booking.vercel.app/guest/change_password/${user_id}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+            const response = await fetch(`${VITE_REQUEST_URL}guest/change_password/${user_id}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
                 body:JSON.stringify({
                     old_password:changePassword.old_password,
                     new_password:changePassword.new_password,

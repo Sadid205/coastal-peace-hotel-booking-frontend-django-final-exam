@@ -5,6 +5,7 @@ function EditProfilePage(){
     const user_id = localStorage.getItem("user_id")
     const [profile,setProfile] = useState({})
     const [isLoading,setIsLoading] = useState(false)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
 
     // isImage(profile?.image)
     // console.log(isImage)
@@ -19,7 +20,7 @@ function EditProfilePage(){
       formData.append("updated_image",profile.image)
         try{
           setIsLoading(true)
-           const response =  await fetch(`https://cph-hotel-booking.vercel.app/guest/edit_profile/${user_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`},
+           const response =  await fetch(`${VITE_REQUEST_URL}guest/edit_profile/${user_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`},
             body:formData
             })
            const data = await response.json()
@@ -34,7 +35,7 @@ function EditProfilePage(){
     useEffect(()=>{
         const profileData = async()=>{
            try{
-            const Data = await fetch(`https://cph-hotel-booking.vercel.app/guest/edit_profile/${user_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const Data = await fetch(`${VITE_REQUEST_URL}guest/edit_profile/${user_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const ProfileData = await Data.json()
             setProfile(ProfileData)
             console.log(profileData)

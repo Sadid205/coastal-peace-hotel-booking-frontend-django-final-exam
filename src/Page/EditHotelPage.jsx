@@ -7,9 +7,10 @@ const EditHotelPage = ()=>{
     const token = localStorage.getItem("Token")
     const [hotelData,setHotelData] = useState()
     const [isLoading,setIsLoading] = useState(false)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(()=>{
         const get_hotel_data = async()=>{
-            const hotel_data_get_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/list/${hotel_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const hotel_data_get_request = await fetch(`${VITE_REQUEST_URL}hotel/list/${hotel_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const hotel_data_get_response = await hotel_data_get_request.json()
             if(hotel_data_get_response){
                 setHotelData(hotel_data_get_response)
@@ -35,7 +36,7 @@ const EditHotelPage = ()=>{
         }      
         try{
           setIsLoading(true)
-          const update_hotel_data_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/list/${hotel_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`},
+          const update_hotel_data_request = await fetch(`${VITE_REQUEST_URL}hotel/list/${hotel_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`},
             body:formData
           })
           if (update_hotel_data_request.ok){

@@ -19,6 +19,7 @@ function RegisterPage(){
     const [errors,setErrors] = useState('');
     const [isLoading,setIsLoading] = useState(false)
     const [adminRequest,setAdminRequest] = useState(false)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const RegisterHandler = async(e)=>{
         e.preventDefault()
         const formData = new FormData()
@@ -33,7 +34,7 @@ function RegisterPage(){
         formData.append("admin_request",adminRequest)
         try{
             setIsLoading(true)
-            const response = await axios.post('https://cph-hotel-booking.vercel.app/guest/register/',formData,{headers:{"Content-Type":"multipart/form-data"}})
+            const response = await axios.post(`${VITE_REQUEST_URL}guest/register/`,formData,{headers:{"Content-Type":"multipart/form-data"}})
             const data = response.data
             if(data){
                 setIsLoading(false)

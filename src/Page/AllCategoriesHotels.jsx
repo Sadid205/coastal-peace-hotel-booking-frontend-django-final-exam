@@ -5,10 +5,11 @@ import moment from 'moment';
 const AllCategoriesHotels = ()=>{
     const [category,setCategory] = useState([])
     const token = localStorage.getItem("Token")
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(()=>{
         const get_category = async()=>{
             try{
-                const category_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/category/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const category_request = await fetch(`${VITE_REQUEST_URL}hotel/category/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const category_response = await category_request.json()
                 if(category_response){
                     setCategory(category_response)

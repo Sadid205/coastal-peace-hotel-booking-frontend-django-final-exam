@@ -26,10 +26,11 @@ const AdminPanel = ()=>{
     const token = localStorage.getItem("Token")
     const user_id = localStorage.getItem('user_id')
     const [bar,setBar] = useState(false)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(()=>{
         const guest_or_admin_account = async()=>{
             try{
-                const guest_or_admin_account_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const guest_or_admin_account_request = await fetch(`${VITE_REQUEST_URL}guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const guest_or_admin_account_response = await guest_or_admin_account_request.json()
                 setGuestOrAdmin(guest_or_admin_account_response)
             }catch(e){
@@ -38,7 +39,7 @@ const AdminPanel = ()=>{
         }
         const pending_booking_list = async()=>{
             try{
-                const pending_booking_list_request = await fetch("https://cph-hotel-booking.vercel.app/booking/pending_booking/",{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const pending_booking_list_request = await fetch(`${VITE_REQUEST_URL}booking/pending_booking/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const pending_booking_list_response = await pending_booking_list_request.json()
                 setPendingBookingList(pending_booking_list_response.pending_booking_list)
 
@@ -48,7 +49,7 @@ const AdminPanel = ()=>{
         }
         const booking_information = async()=>{
             try{
-                const request_booking_info = await fetch("https://cph-hotel-booking.vercel.app/booking/booking_info/",{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const request_booking_info = await fetch(`${VITE_REQUEST_URL}booking/booking_info/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const response_booking_info = await request_booking_info.json()
                 setBookingInfo(response_booking_info.booking_info
                 )
@@ -58,7 +59,7 @@ const AdminPanel = ()=>{
         }
         const getBookingGraphData = async()=>{
             try{
-                const request = await fetch("https://cph-hotel-booking.vercel.app/booking/daily-bookings/",{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const request = await fetch(`${VITE_REQUEST_URL}booking/daily-bookings/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const response = await request.json()
                 setBookingGraphData(response)
             }catch(e){
@@ -67,7 +68,7 @@ const AdminPanel = ()=>{
         }
         const getRevenue = async()=>{
             try{
-                const request = await fetch("https://cph-hotel-booking.vercel.app/transactions/transaction-totals/",{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const request = await fetch(`${VITE_REQUEST_URL}transactions/transaction-totals/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const response = await request.json()
                 setRevenue(response)
             }catch(e){
@@ -85,7 +86,7 @@ const AdminPanel = ()=>{
         e.preventDefault()
         try{
             setConfirmIsLoading(true)
-            const update_request = await fetch(`https://cph-hotel-booking.vercel.app/booking/confirm_booking/${booking_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const update_request = await fetch(`${VITE_REQUEST_URL}booking/confirm_booking/${booking_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const update_response = await update_request.json()
             if(update_response){
                 setConfirmIsLoading(false)
@@ -101,7 +102,7 @@ const AdminPanel = ()=>{
         e.preventDefault()
         try{
             setCancelIsLoading(true)
-            const cancel_request = await fetch(`https://cph-hotel-booking.vercel.app/booking/cancel_booking/${booking_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const cancel_request = await fetch(`${VITE_REQUEST_URL}booking/cancel_booking/${booking_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const cancel_response = await cancel_request.json()
             if(cancel_response){
                 setCancelIsLoading(false)

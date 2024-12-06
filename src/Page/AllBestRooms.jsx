@@ -4,10 +4,11 @@ import { Link } from "react-router-dom"
 const AllBestRooms = ()=>{
     const [bestRooms,setBestRooms] = useState([])
     const token = localStorage.getItem("Token")
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(()=>{
         const get_best_rooms = async()=>{
             try{
-                const get_best_room_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/best_rooms/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const get_best_room_request = await fetch(`${VITE_REQUEST_URL}hotel/best_rooms/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const get_best_room_response = await get_best_room_request.json()
                 if(get_best_room_response){
                     setBestRooms(get_best_room_response)

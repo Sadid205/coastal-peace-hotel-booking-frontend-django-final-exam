@@ -11,15 +11,16 @@ const ProfilePage = () => {
     const [defaultUserData, setDefaultUserData] = useState(null)
     const [userAccountData, setUserAccountData] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(() => {
         const getProfileData = async () => {
             try {
                 setIsLoading(true)
-                const guest = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`, { method: "GET", headers: { 'Authorization': `Token ${token}`, 'Content-Type': 'application/json' } })
+                const guest = await fetch(`${VITE_REQUEST_URL}guest/list/?user_id=${user_id}`, { method: "GET", headers: { 'Authorization': `Token ${token}`, 'Content-Type': 'application/json' } })
                 const guestData = await guest.json()
-                const user = await fetch(`https://cph-hotel-booking.vercel.app/guest/user/${user_id}/`, { method: "GET", headers: { 'Authorization': `Token ${token}`, 'Content-Type': 'application/json' } })
+                const user = await fetch(`${VITE_REQUEST_URL}guest/user/${user_id}/`, { method: "GET", headers: { 'Authorization': `Token ${token}`, 'Content-Type': 'application/json' } })
                 const userData = await user.json()
-                const account = await fetch(`https://cph-hotel-booking.vercel.app/accounts/list/?user_id=${user_id}`, { method: "GET", headers: { 'Authorization': `Token ${token}`, 'Content-Type': 'application/json' } })
+                const account = await fetch(`${VITE_REQUEST_URL}accounts/list/?user_id=${user_id}`, { method: "GET", headers: { 'Authorization': `Token ${token}`, 'Content-Type': 'application/json' } })
                 const accountData = await account.json()
                 if (guestData && userData && accountData) {
                     setGuestUserData(guestData)

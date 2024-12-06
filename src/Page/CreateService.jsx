@@ -6,6 +6,7 @@ const CreateService=()=>{
     const [price,setPrice] = useState("")
     const [description,setDescription] = useState("")
     const token = localStorage.getItem("Token")
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
 
     const updateDatabase = async()=>{
         const formData = new FormData()
@@ -14,7 +15,7 @@ const CreateService=()=>{
         formData.append("images",json_image_data)
         formData.append("price",price)
         formData.append("description",description)
-        const request = await fetch('https://cph-hotel-booking.vercel.app/hotel/services/',{method:"POST",headers:{'Authorization':`Token ${token}`},
+        const request = await fetch(`${VITE_REQUEST_URL}hotel/services/`,{method:"POST",headers:{'Authorization':`Token ${token}`},
             body:formData
         })
         const response = await request.json()
@@ -55,7 +56,7 @@ const CreateService=()=>{
             formData.append("images",json_image_data)
             formData.append("price",price)
             formData.append("description",description)
-            const request = await fetch('https://cph-hotel-booking.vercel.app/hotel/services/',{method:"POST",headers:{'Authorization':`Token ${token}`},
+            const request = await fetch(`${VITE_REQUEST_URL}hotel/services/`,{method:"POST",headers:{'Authorization':`Token ${token}`},
                 body:formData
             })
             const response = await request.json()

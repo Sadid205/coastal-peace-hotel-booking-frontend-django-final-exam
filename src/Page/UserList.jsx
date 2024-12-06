@@ -6,10 +6,11 @@ const UserList = ()=>{
     const [isLoading,setIsLoading] = useState(false)
     const token = localStorage.getItem("Token")
     const user_id = localStorage.getItem("user_id")
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(()=>{
         const get_user_list = async()=>{
             try{
-                const user_list_request = await fetch('https://cph-hotel-booking.vercel.app/guest/user_list/',{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const user_list_request = await fetch(`${VITE_REQUEST_URL}guest/user_list/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const user_list_response = await user_list_request.json()
                 setUserList(user_list_response.user_list)
             }catch(e){
@@ -18,7 +19,7 @@ const UserList = ()=>{
         }
         const get_guest_or_admin = async()=>{
             try{
-              const guest_or_admin_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+              const guest_or_admin_request = await fetch(`${VITE_REQUEST_URL}guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
               const guest_or_admin_response = await guest_or_admin_request.json()
     
             //   console.log(guest_or_admin_response[0])
@@ -40,7 +41,7 @@ const UserList = ()=>{
         e.preventDefault()
         try{
             setIsLoading(true)
-            const add_admin_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/${user_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+            const add_admin_request = await fetch(`${VITE_REQUEST_URL}guest/list/${user_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
                 body:JSON.stringify({
                     is_admin:true
                     })

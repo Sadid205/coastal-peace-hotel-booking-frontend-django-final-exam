@@ -8,9 +8,10 @@ const CreateOffer = ()=>{
     const [offerName,setOfferName] = useState("")
     const [discount,setDiscount] = useState("")
     const [selectedHotel,setSelectedHotel] = useState([])
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(()=>{
         const getHotel = async()=>{
-            const request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/list/?search=${searchValue}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const request = await fetch(`${VITE_REQUEST_URL}hotel/list/?search=${searchValue}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const response = await request.json()
             if(response){
                 setHotel(response?.results)
@@ -31,7 +32,7 @@ const CreateOffer = ()=>{
         selectedHotel.forEach(hotel=>{
             formData.append("hotel_list",hotel)
         })
-        const request =  await fetch('https://cph-hotel-booking.vercel.app/special_offer/list/',{method:"POST",headers:{'Authorization':`Token ${token}`},
+        const request =  await fetch(`${VITE_REQUEST_URL}special_offer/list/`,{method:"POST",headers:{'Authorization':`Token ${token}`},
             body:formData
         })
         const response = await request.json()

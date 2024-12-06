@@ -29,6 +29,7 @@ function HotelDetailsPage(){
     const [hasStayedAt,setHasStayedAt] = useState(false)
     const [bookingLoader,setBookingLoader] = useState(false)
     const [deleteLoader,setDeleteLoader] = useState(false)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const slider = useRef(null)
     const next = ()=>{
         slider?.current.slickNext();
@@ -77,7 +78,7 @@ function HotelDetailsPage(){
         const getDetails = async()=>{
            try{
             setIsLoading(true)
-            const response = await fetch(`https://cph-hotel-booking.vercel.app/hotel/list/${hotel_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const response = await fetch(`${VITE_REQUEST_URL}hotel/list/${hotel_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const data = await response.json()
             if(data){
               setHotelDetails(data)
@@ -89,19 +90,19 @@ function HotelDetailsPage(){
         }
         const getReviews = async()=>{
           try{
-            const hotelReviews = await fetch(`https://cph-hotel-booking.vercel.app/reviews/list/?hotel_id=${hotel_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const hotelReviews = await fetch(`${VITE_REQUEST_URL}reviews/list/?hotel_id=${hotel_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const reviewData = await hotelReviews.json()
             setHotelReviews(reviewData)
             reviewData.forEach(async(single_reviewer)=>{
               try{
-                const user_data = await fetch(`https://cph-hotel-booking.vercel.app/guest/user/?guest_id=${single_reviewer.reviewer}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const user_data = await fetch(`${VITE_REQUEST_URL}guest/user/?guest_id=${single_reviewer.reviewer}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const responseUserData = await user_data.json()
                 setReviewer(prevState=>({
                   ...prevState,
                   [single_reviewer.reviewer]:responseUserData
                 }))
     
-                const  guest_data = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/${single_reviewer.reviewer}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const  guest_data = await fetch(`${VITE_REQUEST_URL}guest/list/${single_reviewer.reviewer}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const responseGuestData = await guest_data.json()
                 setGuestReviewer(prevState=>({
                   ...prevState,
@@ -118,7 +119,7 @@ function HotelDetailsPage(){
         }
         const getGuestAccount=async()=>{
           try{
-            const guestAccount = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const guestAccount = await fetch(`${VITE_REQUEST_URL}guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const guestData = await guestAccount.json()
             setGuestId(guestData[0].id)
           }
@@ -128,7 +129,7 @@ function HotelDetailsPage(){
         }
         const setBookingListMethod=async()=>{
         try{
-          const bookedList = await fetch(`https://cph-hotel-booking.vercel.app/booking/list/?hotel_id=${hotel_id?hotel_id:""}&guest_id=${guestId?guestId:""}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+          const bookedList = await fetch(`${VITE_REQUEST_URL}booking/list/?hotel_id=${hotel_id?hotel_id:""}&guest_id=${guestId?guestId:""}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
           const bookedResponse = await bookedList.json()
           setBookingList(bookedResponse)
         }catch(e){
@@ -171,7 +172,7 @@ function HotelDetailsPage(){
         e.preventDefault()
         try{
         setBookingLoader(true)
-        const bookingRequest = await fetch(`https://cph-hotel-booking.vercel.app/booking/${hotel_id}/`,{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+        const bookingRequest = await fetch(`${VITE_REQUEST_URL}booking/${hotel_id}/`,{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
           body:JSON.stringify({
               number_of_guests:guestNumber,
               room_type:roomTypes
@@ -202,7 +203,7 @@ function HotelDetailsPage(){
     e.preventDefault()
     try{
       setIsReviewPost(true)
-      const postReview = await fetch('https://cph-hotel-booking.vercel.app/reviews/list/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+      const postReview = await fetch(`${VITE_REQUEST_URL}reviews/list/`,{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
         body:JSON.stringify({
           reviewer:guestId,
           hotel:hotel_id,
@@ -223,7 +224,7 @@ function HotelDetailsPage(){
     e.preventDefault()
     try{
       setDeleteLoader(true)
-      const delete_review_request = await fetch(`https://cph-hotel-booking.vercel.app/reviews/list/${review_id}/`,{method:"DELETE",headers:{'Authorization':`Token ${token}`}})
+      const delete_review_request = await fetch(`${VITE_REQUEST_URL}reviews/list/${review_id}/`,{method:"DELETE",headers:{'Authorization':`Token ${token}`}})
       toast.success("Successfully deleted this reviews.")
       setDeleteLoader(false)
     }catch(e){

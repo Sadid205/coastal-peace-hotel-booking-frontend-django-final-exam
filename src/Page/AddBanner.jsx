@@ -4,6 +4,7 @@ const AddBanner=()=>{
     const [images,setImages] = useState([])
     const [bannerName,setBannerName] = useState("")
     const token = localStorage.getItem("Token")
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const HandleUpload = async (e)=>{
         e.preventDefault()
         const API_KEY = import.meta.env.VITE_IMGBB_API_KEY
@@ -33,7 +34,7 @@ const AddBanner=()=>{
              const json_image_data = JSON.stringify(tempUrls)
            formData.append("banner_name",bannerName)
            formData.append("image",json_image_data)
-            const request = await fetch('https://cph-hotel-booking.vercel.app/banner/list/',{method:"POST",headers:{'Authorization':`Token ${token}`},
+            const request = await fetch(`${VITE_REQUEST_URL}banner/list/`,{method:"POST",headers:{'Authorization':`Token ${token}`},
                 body:formData
             })
             const response = await request.json()

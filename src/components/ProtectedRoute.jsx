@@ -10,9 +10,10 @@ const ProtectedRoute = ({token,children})=>{
 export const AdminPanelProtectedRoute = ({token,user_id,children})=>{
     const [isAdmin,setIsAdmin] = useState(null)
     const [isMasterAdmin,setIsMasterAdmin] = useState(null)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const get_guest_or_admin = async()=>{
         try{
-          const guest_or_admin_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+          const guest_or_admin_request = await fetch(`${VITE_REQUEST_URL}guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
           const guest_or_admin_response = await guest_or_admin_request.json()
 
           if(token && guest_or_admin_response[0].is_admin===true){

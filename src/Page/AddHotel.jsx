@@ -14,6 +14,7 @@ const AddHotel = ()=>{
     const [images,setImages] = useState([])
     const [isLoading,setIsLoading] = useState(false)
     const token = localStorage.getItem("Token")
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const handleSubmit= async(e)=>{
         e.preventDefault()
         const formData = new FormData();
@@ -32,7 +33,7 @@ const AddHotel = ()=>{
         })
         try{
             setIsLoading(true)
-            const add_hotel_request = await fetch('https://cph-hotel-booking.vercel.app/hotel/list/',{method:"POST",headers:{'Authorization':`Token ${token}`},
+            const add_hotel_request = await fetch(`${VITE_REQUEST_URL}hotel/list/`,{method:"POST",headers:{'Authorization':`Token ${token}`},
                 body:formData
                 })
             if (add_hotel_request.ok){

@@ -2,17 +2,20 @@ import axios from 'axios'
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import toast,{ Toaster } from "react-hot-toast";
+import { GoogleOAuthProvider,GoogleLogin  } from '@react-oauth/google';
 function LoginPage() {
 const [username,setUsername] = useState('');
 const [password,setPassword] = useState('');
 const [errors,SetErrors] = useState('');
 const [isLoading,setIsLoading] = useState(false)
+const CLIENT_ID=import.meta.env.VITE_CLIENT_ID
+const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
 const navigate = useNavigate()
 const LoginMethod = async(e)=>{
     e.preventDefault()
     try{
         setIsLoading(true)
-        const response = await axios.post('https://cph-hotel-booking.vercel.app/guest/login/',{username,password},{headers:{'Content-Type':'application/json'}})
+        const response = await axios.post(`${VITE_REQUEST_URL}guest/login/`,{username,password},{headers:{'Content-Type':'application/json'}})
         const data = response.data;
         if(data){
           setIsLoading(false)
@@ -32,6 +35,27 @@ const LoginMethod = async(e)=>{
     catch(err){
         console.log(err)
     }
+}
+
+const handleLogin = async(response)=>{
+  const AccessToken = response.credential
+  const googleLogin = await fetch(`${VITE_REQUEST_URL}guest/api/auth/google/login/`,{method:'POST',headers:{
+    'Content-Type':'application/json'
+},body:JSON.stringify({
+  "token":AccessToken
+  })
+})
+const googleLoginResponse = await googleLogin.json()
+console.log(googleLoginResponse)
+if(googleLoginResponse.Token && googleLoginResponse.user_id){
+  toast.success("Login Success")
+  localStorage.setItem('user_id',googleLoginResponse.user_id)
+  localStorage.setItem('Token',googleLoginResponse.Token)
+  navigate('/')
+}else{
+  toast.error("Something went wrong!.Please try again.")
+  navigate('/login')
+}
 }
   return (
   <>
@@ -74,10 +98,12 @@ const LoginMethod = async(e)=>{
             {isLoading?<div className="w-5 h-5 border-4 border-gray-300 rounded-full animate-spin border-t-yellow-200"/>:<p>Login</p>}
             </span>
           </button>
-
             </div>
           </div>
         </form>
+        <GoogleOAuthProvider clientId={CLIENT_ID}>
+          <GoogleLogin onSuccess={(response)=>handleLogin(response)} onError={()=>console.log('Login Failed!')}/>
+        </GoogleOAuthProvider>
       </div>
     </div>
   </div>

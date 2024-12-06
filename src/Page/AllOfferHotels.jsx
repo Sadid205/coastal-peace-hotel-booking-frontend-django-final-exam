@@ -4,10 +4,11 @@ import { Link } from "react-router-dom"
 const AllOfferHotels = ()=>{
     const [specialOffer,setSpecialOffer] = useState([])
     const token = localStorage.getItem("Token")
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(()=>{
         const get_special_offer = async()=>{
             try{
-                const special_offer_request = await fetch(`https://cph-hotel-booking.vercel.app/special_offer/list/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const special_offer_request = await fetch(`${VITE_REQUEST_URL}special_offer/list/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const special_offer_response = await special_offer_request.json()
                 if(special_offer_response){
                     setSpecialOffer(special_offer_response)

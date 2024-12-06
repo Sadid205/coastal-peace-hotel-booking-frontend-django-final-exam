@@ -17,6 +17,7 @@ const Header = () => {
   const [isMasterAdmin,setIsMasterAdmin] = useState(null)
   const token = localStorage.getItem("Token")
   const user_id = localStorage.getItem("user_id")
+  const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
   const Links = [
     { name: "Home", link: "/" },
     // { name: "Supports", link: "/supports" },
@@ -38,7 +39,7 @@ const Header = () => {
   useEffect(()=>{
     const fetchData = async()=>{
       try{
-        const getUser = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+        const getUser = await fetch(`${VITE_REQUEST_URL}guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
         if (!getUser.ok){
           throw new Error(`HTTP error! status: ${getUser.status}`)
         }
@@ -50,7 +51,7 @@ const Header = () => {
     }
     const get_guest_or_admin = async()=>{
       try{
-        const guest_or_admin_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+        const guest_or_admin_request = await fetch(`${VITE_REQUEST_URL}guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
         const guest_or_admin_response = await guest_or_admin_request.json()
 
       //   console.log(guest_or_admin_response[0])
@@ -78,7 +79,7 @@ const Header = () => {
   const LogoutHandler = async()=>{
     try{
       setIsLoading(true)
-      const response = await fetch('https://cph-hotel-booking.vercel.app/guest/logout/',{method:"GET",headers:{Authorization:`Token ${token}`,"Content-Type":"application/json"}})
+      const response = await fetch(`${VITE_REQUEST_URL}guest/logout/`,{method:"GET",headers:{Authorization:`Token ${token}`,"Content-Type":"application/json"}})
       const value = await response.json()
       if (value.Success){
         setIsLoading(false)

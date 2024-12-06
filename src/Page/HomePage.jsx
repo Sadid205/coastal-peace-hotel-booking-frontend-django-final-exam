@@ -32,6 +32,7 @@ function HomePage(){
     let [page,setPage] = useState(1)
     const {searchValue} = useContext(CreateSearchContext)
     const AutoplaySlider = withAutoplay(AwesomeSlider);
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     const responsive = {
         superLargeDesktop: {
           // the naming can be any, depends on you.
@@ -54,7 +55,7 @@ function HomePage(){
     useEffect(()=>{
        const getHotelList = async()=>{
         try{
-            const response = await fetch(`https://cph-hotel-booking.vercel.app/hotel/list/?page=${page}&search=${searchValue}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const response = await fetch(`${VITE_REQUEST_URL}hotel/list/?page=${page}&search=${searchValue}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const data = await response.json()
             if (data){
                 setHotelData(data)
@@ -65,7 +66,7 @@ function HomePage(){
        }
        const guest_or_admin_account = async()=>{
             try{
-                const guest_or_admin_account_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const guest_or_admin_account_request = await fetch(`${VITE_REQUEST_URL}guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const guest_or_admin_account_response = await guest_or_admin_account_request.json()
                 setGuestOrAdmin(guest_or_admin_account_response[0])
             }catch(e){
@@ -74,7 +75,7 @@ function HomePage(){
         }
         const get_banner = async()=>{
             try{
-                const get_banner_request = await fetch(`https://cph-hotel-booking.vercel.app/banner/list/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const get_banner_request = await fetch(`${VITE_REQUEST_URL}banner/list/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const get_banner_response = await get_banner_request.json()
                 if(get_banner_response){
                     setBanners(get_banner_response)
@@ -86,7 +87,7 @@ function HomePage(){
         }
         const get_best_rooms = async()=>{
             try{
-                const get_best_room_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/best_rooms/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const get_best_room_request = await fetch(`${VITE_REQUEST_URL}hotel/best_rooms/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const get_best_room_response = await get_best_room_request.json()
                 if(get_best_room_response){
                     setBestRooms(get_best_room_response)
@@ -97,7 +98,7 @@ function HomePage(){
         }
         const get_special_offer = async()=>{
             try{
-                const special_offer_request = await fetch(`https://cph-hotel-booking.vercel.app/special_offer/list/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const special_offer_request = await fetch(`${VITE_REQUEST_URL}special_offer/list/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const special_offer_response = await special_offer_request.json()
                 if(special_offer_response){
                     setSpecialOffer(special_offer_response)
@@ -108,7 +109,7 @@ function HomePage(){
         }
         const get_category = async()=>{
             try{
-                const category_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/category/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const category_request = await fetch(`${VITE_REQUEST_URL}hotel/category/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const category_response = await category_request.json()
                 if(category_response){
                     setCategory(category_response)
@@ -119,7 +120,7 @@ function HomePage(){
         }
         const get_services = async()=>{
             try{
-                const services_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/services/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const services_request = await fetch(`${VITE_REQUEST_URL}hotel/services/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const services_response = await services_request.json()
                 if(services_response){
                     setServices(services_response)
@@ -130,7 +131,7 @@ function HomePage(){
         }
         const get_feedback = async()=>{
             try{
-                const feedback_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/feedback/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const feedback_request = await fetch(`${VITE_REQUEST_URL}hotel/feedback/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const feedback_response = await feedback_request.json()
                 if(feedback_response){
                     setFeedBack(feedback_response)
@@ -155,7 +156,7 @@ function HomePage(){
     const specialOfferDeleteHandler = async(e,special_offer_id)=>{
       e.preventDefault()
       if (special_offer_id !=null){
-        const delete_request = await fetch(`https://cph-hotel-booking.vercel.app/special_offer/list/${special_offer_id}/`,{method:"DELETE",headers:{'Authorization':`Token ${token}`}}) 
+        const delete_request = await fetch(`${VITE_REQUEST_URL}special_offer/list/${special_offer_id}/`,{method:"DELETE",headers:{'Authorization':`Token ${token}`}}) 
         if(delete_request.status===200){
           toast.success("Successfully deleted special offer.")
         }else{
@@ -167,7 +168,7 @@ function HomePage(){
     const hotelCategoriesDeleteHandler = async(e,category_id)=>{
       e.preventDefault()
       if (category_id !=null){
-        const delete_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/category/${category_id}/`,{method:"DELETE",headers:{'Authorization':`Token ${token}`}}) 
+        const delete_request = await fetch(`${VITE_REQUEST_URL}hotel/category/${category_id}/`,{method:"DELETE",headers:{'Authorization':`Token ${token}`}}) 
         console.log(delete_request.status)
         if(delete_request.status===200){
           toast.success("Successfully deleted hotel category.")
@@ -181,7 +182,7 @@ function HomePage(){
         e.preventDefault()
         try{
             setIsLoading(true)
-            const delete_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/list/${hotel_id}/`,{method:"DELETE",headers:{'Authorization':`Token ${token}`}})
+            const delete_request = await fetch(`${VITE_REQUEST_URL}hotel/list/${hotel_id}/`,{method:"DELETE",headers:{'Authorization':`Token ${token}`}})
             toast.success("Successfully deleted hotel.")
             setIsLoading(false)
         }catch(e){

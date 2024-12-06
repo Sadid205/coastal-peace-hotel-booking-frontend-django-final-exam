@@ -5,10 +5,11 @@ const ServiceDetails = ()=>{
     const [servicesData,setServicesData] = useState({})
     const token = localStorage.getItem("Token")
     const [imageUrl,setImageUrl] = useState("") 
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
 
     useEffect(()=>{
         const getServicesData = async()=>{
-            const request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/services/${service_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const request = await fetch(`${VITE_REQUEST_URL}hotel/services/${service_id}/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const response = await request.json()
             if(response){
                 setServicesData(response)

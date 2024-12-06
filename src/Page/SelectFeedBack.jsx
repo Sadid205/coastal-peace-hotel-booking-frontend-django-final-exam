@@ -7,9 +7,10 @@ const SelectFeedBack = ()=>{
     const token = localStorage.getItem("Token")
     const [feedbackName,setFeedBackName] = useState("")
     const [selectedReview,setSelectedReview] = useState([])
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(()=>{
         const getReview = async()=>{
-            const request = await fetch(`https://cph-hotel-booking.vercel.app/reviews/list/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+            const request = await fetch(`${VITE_REQUEST_URL}reviews/list/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
             const response = await request.json()
             if(response){
                 setReviews(response)
@@ -28,7 +29,7 @@ const SelectFeedBack = ()=>{
         selectedReview.forEach(review=>{
             formData.append("review_list",review)
         })
-        const request =  await fetch('https://cph-hotel-booking.vercel.app/hotel/feedback/',{method:"POST",headers:{'Authorization':`Token ${token}`},
+        const request =  await fetch(`${VITE_REQUEST_URL}hotel/feedback/`,{method:"POST",headers:{'Authorization':`Token ${token}`},
             body:formData
         })
         const response = await request.json()

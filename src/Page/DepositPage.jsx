@@ -8,6 +8,7 @@ const DepositPage = ()=>{
     const [isLoading,setIsLoading] = useState(false)
     const location = useLocation()
     const queryParams = new URLSearchParams(location.search)
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     
     useEffect(()=>{
         const status_params = queryParams.get('status')
@@ -24,7 +25,7 @@ const DepositPage = ()=>{
     const depositHandle = async(e)=>{
         e.preventDefault()
         setIsLoading(true)
-        const response = await fetch('https://cph-hotel-booking.vercel.app/accounts/deposit/',{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+        const response = await fetch(`${VITE_REQUEST_URL}accounts/deposit/`,{method:"POST",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
             body:JSON.stringify({
                 amount:deposit
                 })

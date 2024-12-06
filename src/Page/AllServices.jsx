@@ -4,10 +4,11 @@ import { Link } from "react-router-dom"
 const AllServices = ()=>{
     const [services,setServices] = useState([])
     const token = localStorage.getItem("Token")
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(()=>{
         const get_services = async()=>{
             try{
-                const services_request = await fetch(`https://cph-hotel-booking.vercel.app/hotel/services/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const services_request = await fetch(`${VITE_REQUEST_URL}hotel/services/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const services_response = await services_request.json()
                 if(services_response){
                     setServices(services_response)

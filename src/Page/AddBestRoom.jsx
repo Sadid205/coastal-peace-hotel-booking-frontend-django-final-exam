@@ -18,6 +18,7 @@ const AddBestRoom=()=>{
     const [roomLocation,setRoomLocation] = useState("")
     const [rating,setRating] = useState()
     const token = localStorage.getItem("Token")
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
 
     // const [bodyData,setBodyData] = useState({
     //     room_name: "",
@@ -92,7 +93,7 @@ const AddBestRoom=()=>{
             formData.append("location",roomLocation)
             formData.append("amenities",json_amenities_data)
             formData.append("rating",rating)
-            const request = await fetch('https://cph-hotel-booking.vercel.app/hotel/best_rooms/',{method:"POST",headers:{'Authorization':`Token ${token}`},
+            const request = await fetch(`${VITE_REQUEST_URL}hotel/best_rooms/`,{method:"POST",headers:{'Authorization':`Token ${token}`},
                 body:formData
             })
             const response = await request.json()

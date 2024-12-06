@@ -6,10 +6,11 @@ const AdminRequest = ()=>{
     const [confirmIsLoading,setConfirmIsLoading] = useState(false)
     const [cancelIsLoading,setCancelIsLoading] = useState(false)
     const token = localStorage.getItem("Token")
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(()=>{
         const getAdminRequestList = async()=>{
             try{
-                const admin_request_list_request = await fetch('https://cph-hotel-booking.vercel.app/guest/admin_request/',{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const admin_request_list_request = await fetch(`${VITE_REQUEST_URL}guest/admin_request/`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const admin_request_list_response = await admin_request_list_request.json()
                 setAdminRequestList(admin_request_list_response.admin_request)
             }catch(e){
@@ -22,7 +23,7 @@ const AdminRequest = ()=>{
         e.preventDefault()
         try{
             setConfirmIsLoading(true)
-            const confirm_admin_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/${guest_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+            const confirm_admin_request = await fetch(`${VITE_REQUEST_URL}guest/list/${guest_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
                 body:JSON.stringify({
                     is_admin:true,
                     admin_request:false
@@ -42,7 +43,7 @@ const AdminRequest = ()=>{
         e.preventDefault()
         try{
             setCancelIsLoading(true)
-            const cancel_admin_request = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/${guest_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+            const cancel_admin_request = await fetch(`${VITE_REQUEST_URL}guest/list/${guest_id}/`,{method:"PATCH",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
                 body:JSON.stringify({
                     admin_request:false
                     })

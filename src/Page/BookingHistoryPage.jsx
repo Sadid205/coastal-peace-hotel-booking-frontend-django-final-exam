@@ -11,10 +11,11 @@ function BookingHistoryPage(){
     const [isChangeResponse,setIsChangeResponse] = useState(false)
     const user_id = localStorage.getItem("user_id")
     const token = localStorage.getItem("Token")
+    const VITE_REQUEST_URL=import.meta.env.VITE_REQUEST_URL
     useEffect(()=>{
             const getGuestAccount=async()=>{
                 try{
-                const guestAccount = await fetch(`https://cph-hotel-booking.vercel.app/guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const guestAccount = await fetch(`${VITE_REQUEST_URL}guest/list/?user_id=${user_id}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const guestData = await guestAccount.json()
                 setGuestId(guestData[0].id)
                 }
@@ -25,7 +26,7 @@ function BookingHistoryPage(){
             const getBookingHistory = async()=>{
                try{
                 setIsLoading(true)
-                const booking_history = await fetch(`https://cph-hotel-booking.vercel.app/booking/list/?guest_id=${guestId}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
+                const booking_history = await fetch(`${VITE_REQUEST_URL}booking/list/?guest_id=${guestId}`,{method:"GET",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'}})
                 const response_data = await booking_history.json()
                 if(response_data){
                     setIsLoading(false)
@@ -58,7 +59,7 @@ function BookingHistoryPage(){
                if(bookingStatus==="Checked-in"){
                 try{
                     setIsChangeResponse(true)
-                    const change = await fetch(`https://cph-hotel-booking.vercel.app/booking/list/${showModal?.bookedId}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+                    const change = await fetch(`${VITE_REQUEST_URL}booking/list/${showModal?.bookedId}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
                         body:JSON.stringify({
                             booking_status:bookingStatus,
                             check_in_date:date,
@@ -74,7 +75,7 @@ function BookingHistoryPage(){
                 }
                }else if(bookingStatus==="Checked-out"){
                 try{
-                    const change = await fetch(`https://cph-hotel-booking.vercel.app/booking/list/${showModal?.bookedId}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+                    const change = await fetch(`${VITE_REQUEST_URL}booking/list/${showModal?.bookedId}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
                         body:JSON.stringify({
                             booking_status:bookingStatus,
                             check_out_date:date,
@@ -90,7 +91,7 @@ function BookingHistoryPage(){
                 }
                }else{
                 try{
-                    const change = await fetch(`https://cph-hotel-booking.vercel.app/booking/list/${showModal?.bookedId}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
+                    const change = await fetch(`${VITE_REQUEST_URL}booking/list/${showModal?.bookedId}/`,{method:"PUT",headers:{'Authorization':`Token ${token}`,'Content-Type':'application/json'},
                         body:JSON.stringify({
                             booking_status:bookingStatus,
                             })
