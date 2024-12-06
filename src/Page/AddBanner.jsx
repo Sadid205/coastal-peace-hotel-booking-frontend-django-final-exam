@@ -24,7 +24,7 @@ const AddBanner=()=>{
                         console.error("Image upload failed")
                     }
                 }catch(e){
-                    console.error("Error uploading image:",e)
+                    console.error("Error uploading images:",e)
                 }
             }
         })
